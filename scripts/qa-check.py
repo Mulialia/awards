@@ -44,7 +44,7 @@ from PIL import Image
 allok = True
 with tempfile.TemporaryDirectory() as d:
     for i, n in enumerate(cat['nominees']):
-        g = nom_bounds[i] + 260
+        g = nom_bounds[i] + (NOMF - 55)   # mid-hold: after Stage C settles, before Stage E exits
         p = os.path.join(d, f'{i}.png')
         subprocess.check_call(['ffmpeg','-v','error','-y','-i',mp4,'-vf',f'select=eq(n\\,{g})','-vframes','1',p])
         im = Image.open(p).convert('L')

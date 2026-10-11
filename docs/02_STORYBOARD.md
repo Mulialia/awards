@@ -14,19 +14,19 @@
 | 3.7–4.4 s | 112–132 | "AWARD" + red·gold·green signature tick slide in. |
 | 4.2–5.0 s | 126–150 | Title lifts and fades; the hairline returns to full width at mid-screen; category label + emblem fade in. **Last frame = first frame of Nominee 01.** |
 
-## Nominee presentation — 14.0 s (420 f), identical timing for every nominee
+## Nominee presentation — 5.0 s (150 f), identical timing for every nominee
 | Time | Frames | Stage | Movement |
 |---|---|---|---|
-| 0.0–0.7 s | 0–22 | open | Inherited hairline collapses to centre. |
-| 0.2–1.5 s | 6–44 | **A** | Chamfered gold frame (and offset echo frame) draws itself. |
-| 0.7–2.1 s | 22–64 | **A** | Portrait revealed bottom-to-top behind a gold leading edge; push-in settles. |
-| 1.1–1.7 s | 34–52 | | Eyebrow "NOMINEE 01 / 05" draws in. |
-| 1.5–2.6 s | 46–80 | **B** | Name rises line-by-line from masks with de-blur. Single light sweep crosses the portrait (1.7–2.8 s). |
-| 2.9–3.7 s | 86–112 | | Gold rule draws under the name. |
-| 3.2–4.5 s | 96–135 | **C** | Title (if any) · business · country (if any), staggered. |
-| 4.7–5.9 s | 140–176 | **D** | *Optional* achievement panel. Absent → nothing renders, no gap. |
-| 2.7–12.5 s | 80–374 | hold | ≈ 10 s of fully readable name/business; slow 3.5 % portrait push-in and live network pulses behind. |
-| 12.5–14.0 s | 374–420 | **E** | Business → name → rule/eyebrow exit left with fade (5-frame stagger); portrait closes top-down; frame retracts; hairline redraws to full width. **Last frame = first frame of the next nominee.** |
+| 0.0–0.3 s | 0–10 | open | Inherited hairline collapses to centre. |
+| 0.1–0.7 s | 3–22 | **A** | Chamfered gold frame (and offset echo frame) draws itself. |
+| 0.3–1.3 s | 10–40 | **A** | Portrait revealed bottom-to-top behind a gold leading edge; push-in settles. |
+| 0.6–1.1 s | 18–32 | | Eyebrow "NOMINEE 01 / 05" draws in. |
+| 0.9–1.7 s | 26–52 | **B** | Name rises line-by-line from masks with de-blur. Single light sweep crosses the portrait (1.0–1.7 s). |
+| 1.7–2.3 s | 52–68 | | Gold rule draws under the name. |
+| 1.9–2.7 s | 56–71 | **C** | Title (if any) · business · country (if any), staggered. |
+| 2.8–3.3 s | 84–100 | **D** | *Optional* achievement panel. Absent → nothing renders, no gap. |
+| 2.4–3.6 s | 71–108 | hold | Fully readable name/business; slow 3.5 % portrait push-in and live network pulses behind. |
+| 3.6–5.0 s | 108–150 | **E** | Business → name → rule/eyebrow exit left with fade (5-frame stagger); portrait closes top-down; frame retracts; hairline redraws to full width. **Last frame = first frame of the next nominee.** |
 
 ## Closing roster — 8.0 s (240 f)
 | Time | Frames | Movement |

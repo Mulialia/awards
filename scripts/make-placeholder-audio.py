@@ -7,8 +7,12 @@ reverb), so there is NO third-party music or sample licensing involved. It is a 
 sketch of the sonic language (warm pad · gold bell tones · airy transitions) for review and
 sync-testing — replace it with commissioned/licensed audio before the ceremony.
 
-Usage:  python3 scripts/make-placeholder-audio.py <nominee_count> [out.wav]
+Usage:  python3 scripts/make-placeholder-audio.py [categoryId | nominee_count] [out.wav]
 Timing: reads src/data/timing.json; cue frames below mirror src/utils/timing.ts (keep in sync).
+
+First argument is either a CATEGORY ID (default: every category in awards.json gets its own
+master at out/audio/<categoryId>-soundtrack.wav, sized to that category's nominee count) or a
+plain nominee count for the legacy single-file output.
 """
 import json, sys, wave
 import numpy as np
@@ -17,8 +21,16 @@ from scipy.signal import butter, sosfilt, fftconvolve
 SR = 48000
 T = json.load(open('src/data/timing.json'))
 FPS, INTRO, NOMF, ROST = T['fps'], T['introFrames'], T['nomineeFrames'], T['rosterFrames']
-N = int(sys.argv[1]) if len(sys.argv) > 1 else 5
-OUT = sys.argv[2] if len(sys.argv) > 2 else 'out/audio/placeholder-soundtrack.wav'
+
+AWARDS = json.load(open('src/data/awards.json'))
+CATS = {c['id']: c for c in AWARDS['categories']}
+arg = sys.argv[1] if len(sys.argv) > 1 else AWARDS['categories'][0]['id']
+if arg in CATS:                      # per-category master (recommended)
+    N = len(CATS[arg]['nominees'])
+    OUT = sys.argv[2] if len(sys.argv) > 2 else f'out/audio/{arg}-soundtrack.wav'
+else:                                # legacy: bare nominee count
+    N = int(arg)
+    OUT = sys.argv[2] if len(sys.argv) > 2 else 'out/audio/placeholder-soundtrack.wav'
 rng = np.random.default_rng(7)
 
 total = (INTRO + N * NOMF + ROST) / FPS
@@ -91,21 +103,21 @@ put(bell(A['A4'], 4.0), t_of(112), gain=0.14)                         # "AWARD"
 put(sub_hit(41, 2.6), t_of(112), gain=0.4)
 put(noise_sweep(0.9, 6000, 900, False), t_of(126), gain=0.12)         # hairline returns
 
-# ── nominees ────────────────────────────────────────────────────────────────────────────────
+# ── nominees (cue frames mirror NOM in src/utils/timing.ts — 150-frame scene) ─────────────────
 phrase = ['A4', 'C5', 'G4', 'E5', 'D4']  # varied sparkle per nominee (cycled)
 for i in range(N):
     base = INTRO + i * NOMF
     S = lambda f: t_of(base + f)
     put(noise_sweep(0.7, 700, 4200, True), S(2), gain=0.09)             # hairline collapse / frame draws
-    put(noise_sweep(1.5, 300, 3000, True), S(22), gain=0.13)            # portrait reveal
-    put(sub_hit(44, 1.8), S(46), gain=0.38)                              # name lands
-    put(bell(A[phrase[i % len(phrase)]], 3.6), S(46), pan=0.1, gain=0.17)
-    put(pluck(A['E4'], 1.8), S(54), pan=-0.2, gain=0.09)
-    put(pluck(A['A3'], 1.8), S(62), pan=0.25, gain=0.08)
-    put(pluck(A['C5'], 1.2), S(96), pan=0.3, gain=0.06)                 # identity appears
-    put(pluck(A['G4'], 1.2), S(105), pan=-0.3, gain=0.05)
-    put(noise_sweep(1.3, 3800, 500, False), S(376), gain=0.11)          # exit
-    put(noise_sweep(0.95, 700, 5500, True), S(394), gain=0.08)          # hairline redraws
+    put(noise_sweep(1.5, 300, 3000, True), S(12), gain=0.13)            # portrait reveal (portraitWipe 10–40)
+    put(sub_hit(44, 1.8), S(26), gain=0.38)                              # name lands (nameStart 26)
+    put(bell(A[phrase[i % len(phrase)]], 3.6), S(26), pan=0.1, gain=0.17)
+    put(pluck(A['E4'], 1.8), S(30), pan=-0.2, gain=0.09)
+    put(pluck(A['A3'], 1.8), S(34), pan=0.25, gain=0.08)
+    put(pluck(A['C5'], 1.2), S(56), pan=0.3, gain=0.06)                 # identity appears (identityStart 56)
+    put(pluck(A['G4'], 1.2), S(66), pan=-0.3, gain=0.05)
+    put(noise_sweep(1.3, 3800, 500, False), S(110), gain=0.11)          # exit (exitStart 108)
+    put(noise_sweep(0.95, 700, 5500, True), S(130), gain=0.08)          # hairline redraws (hairlineOut 128)
 
 # ── closing roster ────────────────────────────────────────────────────────────────────────────
 rb = INTRO + N * NOMF

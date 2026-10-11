@@ -4,8 +4,8 @@ Data-driven motion graphics built with **React + Remotion 4**. The first categor
 (**Youth Creative Business Concept Award**, 5 nominees) is the prototype; the system is the product.
 
 ```
-Category intro (5 s)  →  Nominee 01 (14 s)  →  Nominee 02 (14 s)  → … →  Nominee N (14 s)
-1920×1080 · 30 fps · H.264 MP4 · 16:9 · SDR           (83 s for 5 nominees)
+Category intro (5 s)  →  Nominee 01 (5 s)  →  Nominee 02 (5 s)  → … →  Nominee N (5 s)
+1920×1080 · 30 fps · H.264 MP4 · 16:9 · SDR           (38 s for 5 nominees)
 ```
 
 ---
@@ -82,22 +82,26 @@ npx remotion render src/index.ts NomineeReveal out/zinzia.mp4 \
   --props='{"categoryId":"youth-creative-business-concept","nomineeId":"youth-001"}'
 
 # Review stills at specific frames (contact-sheet workflow)
-node scripts/stills.mjs NomineeReveal '{"categoryId":"youth-creative-business-concept","nomineeId":"youth-001"}' 0,60,120,200,419
+node scripts/stills.mjs NomineeReveal '{"categoryId":"youth-creative-business-concept","nomineeId":"youth-001"}' 0,30,60,110,149
 ```
 
 ### Soundtrack (optional — the silent masters are the primary deliverable)
 ```bash
-python3 scripts/make-placeholder-audio.py 5                 # synthesised PLACEHOLDER, no licensing issues
-node scripts/mux-audio.mjs youth-creative-business-concept  # → out/<category>/with-audio/*.mp4
+# One master per category, sized to that category's nominee count (recommended):
+python3 scripts/make-placeholder-audio.py youth-creative-business-concept  # → out/audio/youth-creative-business-concept-soundtrack.wav
+node scripts/mux-audio.mjs youth-creative-business-concept  # → out/<category>/with-audio/*.mp4 (uses the per-category WAV automatically)
+
+# Legacy: a bare nominee count still works → out/audio/placeholder-soundtrack.wav
+python3 scripts/make-placeholder-audio.py 5
 ```
-To use real audio: export a stereo 48 kHz WAV of the **whole category sequence** (same length) and pass it as the 2nd argument to `mux-audio.mjs`. Every clip is cut from that track at its sequence position, so all files stay in sync.
-Cue frames (for composers): see `INTRO` and `NOM` in `src/utils/timing.ts` — e.g. name lands at nominee-frame 46, exit begins at 374.
+`make-placeholder-audio.py` reads `src/data/timing.json`, so regenerating after any timing change keeps the audio in sync. To use real audio: export a stereo 48 kHz WAV of the **whole category sequence** (same length) and pass it as the 2nd argument to `mux-audio.mjs`. Every clip is cut from that track at its sequence position, so all files stay in sync.
+Cue frames (for composers): see `INTRO` and `NOM` in `src/utils/timing.ts` — e.g. name lands at nominee-frame 26, exit begins at 108.
 
 ### Changing output specs
 * **Resolution / frame rate**: edit `src/data/timing.json` (`width`, `height`, `fps`). Layout constants in `src/styles/theme.ts` are in 1920×1080 px; for another 16:9 size just change the numbers, for another aspect ratio re-check `theme.layout` and `theme.safe`.
   If you change `fps`, also scale the frame counts in `src/utils/timing.ts` (they are authored at 30 fps).
 * **Codec / quality**: `remotion.config.ts` (`setCodec`, `setCrf` — lower CRF = higher quality) and `scripts/render-category.mjs`.
-* **Duration per nominee**: `nomineeFrames` in `timing.json` and the `NOM` stage table. The hold is the long middle section.
+* **Duration per nominee**: `nomineeFrames` in `timing.json` **and** the `NOM` stage table in `src/utils/timing.ts` (the JSON sets the scene length; the table must fit inside it — `exitStart + 42 ≤ nomineeFrames`). The hold is the middle section. After changing either, regenerate the soundtrack (`make-placeholder-audio.py` mirrors both).
 
 ## 4. Architecture
 

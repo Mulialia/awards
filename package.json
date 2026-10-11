@@ -7,7 +7,7 @@
     "dev": "remotion studio src/index.ts",
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-data.mjs",
-    "still:direction": "remotion still src/index.ts NomineeReveal out/stills/nominee-reveal.png --frame=170 --props='{\"categoryId\":\"youth-creative-business-concept\",\"nomineeId\":\"youth-001\"}'",
+    "still:direction": "remotion still src/index.ts NomineeReveal out/stills/nominee-reveal.png --frame=110 --props='{\"categoryId\":\"youth-creative-business-concept\",\"nomineeId\":\"youth-001\"}'",
     "render:intro": "remotion render src/index.ts CategoryIntro out/youth-creative-business-concept/00-category-intro.mp4 --props='{\"categoryId\":\"youth-creative-business-concept\"}'",
     "render:nominee": "remotion render src/index.ts NomineeReveal out/nominee.mp4",
     "render:sequence": "remotion render src/index.ts CategorySequence out/youth-creative-business-concept/category-sequence-silent.mp4 --props='{\"categoryId\":\"youth-creative-business-concept\"}'",
@@ -26,5 +26,8 @@
   "devDependencies": {
     "@types/react": "^18.3.0",
     "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
   }
 }
