@@ -1,0 +1,30 @@
+{
+  "name": "yora-awards-motion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "YORA Entrepreneurial Awards — data-driven nominee presentation system (Remotion)",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "validate": "node scripts/validate-data.mjs",
+    "still:direction": "remotion still src/index.ts NomineeReveal out/stills/nominee-reveal.png --frame=170 --props='{\"categoryId\":\"youth-creative-business-concept\",\"nomineeId\":\"youth-001\"}'",
+    "render:intro": "remotion render src/index.ts CategoryIntro out/youth-creative-business-concept/00-category-intro.mp4 --props='{\"categoryId\":\"youth-creative-business-concept\"}'",
+    "render:nominee": "remotion render src/index.ts NomineeReveal out/nominee.mp4",
+    "render:sequence": "remotion render src/index.ts CategorySequence out/youth-creative-business-concept/category-sequence-silent.mp4 --props='{\"categoryId\":\"youth-creative-business-concept\"}'",
+    "split": "node scripts/split-sequence.mjs",
+    "audio": "python3 scripts/make-placeholder-audio.py"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.2.0",
+    "@fontsource-variable/manrope": "^5.2.0",
+    "@remotion/cli": "4.0.534",
+    "@remotion/layout-utils": "4.0.534",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.534"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^7.0.2"
+  }
+}

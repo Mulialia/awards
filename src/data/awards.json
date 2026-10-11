@@ -1,0 +1,70 @@
+{
+  "event": {
+    "name": "YORA Entrepreneurial Awards",
+    "brand": "YORA",
+    "year": null
+  },
+  "categories": [
+    {
+      "id": "youth-creative-business-concept",
+      "number": 1,
+      "name": "Youth Creative Business Concept Award",
+      "introTitle": {
+        "lines": ["Youth Creative", "Business Concept"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "youth-001",
+          "name": "Zinzia Adhiambo",
+          "business": "Travelvia Friends & Explorers",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "youth-002",
+          "name": "Asaph Ankunda",
+          "business": "Trust Agro Processors",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "youth-003",
+          "name": "Miraf Teklu",
+          "business": "Mafi Caree",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "youth-004",
+          "name": "Adrian Machingura",
+          "business": "Vitromatic Technologies",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "youth-005",
+          "name": "Eunice Adewale",
+          "business": "Smokeless Briqs Energy Solutions",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    }
+  ]
+}

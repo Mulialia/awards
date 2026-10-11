@@ -1,0 +1,33 @@
+# --- Dependencies ---
+node_modules/
+
+# --- Render output ---
+# All render scripts (render.sh, render_chunks.sh, npm run render:*) write MP4s here.
+out/
+
+# --- Remotion / build caches ---
+.remotion/
+.cache/
+dist/
+*.tsbuildinfo
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Logs ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Editors ---
+.vscode/
+.idea/
+*.swp
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+Desktop.ini

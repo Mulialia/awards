@@ -1,0 +1,39 @@
+# Storyboard (frames taken from the final MP4 — see `storyboard.png`)
+
+30 fps. Frame numbers are local to each piece. Cue frames are authoritative in `src/utils/timing.ts`.
+
+## Category introduction — 5.0 s (150 f)
+| Time | Frames | Movement |
+|---|---|---|
+| 0.0–0.8 s | 0–24 | Obsidian + warm lamp glow. A gold hairline draws outward from centre to full width. |
+| 0.3–1.2 s | 10–36 | YORA lock-up fades/scales up on an ivory plate, hairline passing behind it. Scattered gold points begin to fly in. |
+| 1.9–2.6 s | 58–78 | Plate dissolves. Points complete converging into the dot-matrix continent; hubs and links draw themselves. |
+| 1.9–2.9 s | 58–86 | Hairline rises and shortens into a title rule. |
+| 2.5–3.1 s | 74–92 | Eyebrow "CATEGORY 01" slides in. |
+| 2.7–3.9 s | 80–116 | "Youth Creative" then "Business Concept" rise from masks with a short de-blur (10-frame stagger). |
+| 3.7–4.4 s | 112–132 | "AWARD" + red·gold·green signature tick slide in. |
+| 4.2–5.0 s | 126–150 | Title lifts and fades; the hairline returns to full width at mid-screen; category label + emblem fade in. **Last frame = first frame of Nominee 01.** |
+
+## Nominee presentation — 14.0 s (420 f), identical timing for every nominee
+| Time | Frames | Stage | Movement |
+|---|---|---|---|
+| 0.0–0.7 s | 0–22 | open | Inherited hairline collapses to centre. |
+| 0.2–1.5 s | 6–44 | **A** | Chamfered gold frame (and offset echo frame) draws itself. |
+| 0.7–2.1 s | 22–64 | **A** | Portrait revealed bottom-to-top behind a gold leading edge; push-in settles. |
+| 1.1–1.7 s | 34–52 | | Eyebrow "NOMINEE 01 / 05" draws in. |
+| 1.5–2.6 s | 46–80 | **B** | Name rises line-by-line from masks with de-blur. Single light sweep crosses the portrait (1.7–2.8 s). |
+| 2.9–3.7 s | 86–112 | | Gold rule draws under the name. |
+| 3.2–4.5 s | 96–135 | **C** | Title (if any) · business · country (if any), staggered. |
+| 4.7–5.9 s | 140–176 | **D** | *Optional* achievement panel. Absent → nothing renders, no gap. |
+| 2.7–12.5 s | 80–374 | hold | ≈ 10 s of fully readable name/business; slow 3.5 % portrait push-in and live network pulses behind. |
+| 12.5–14.0 s | 374–420 | **E** | Business → name → rule/eyebrow exit left with fade (5-frame stagger); portrait closes top-down; frame retracts; hairline redraws to full width. **Last frame = first frame of the next nominee.** |
+
+## Closing roster — 8.0 s (240 f)
+| Time | Frames | Movement |
+|---|---|---|
+| 0.0–0.7 s | 0–22 | Inherited hairline collapses to centre. |
+| 0.3–1.3 s | 8–40 | "THE NOMINEES" eyebrow and the category title (same line breaks as the intro) rise into the left rail. |
+| 1.1–3.7 s | 34–100 | Nominee rows rise in presentation order (8-frame stagger): number · name · business, each over a gold hairline that draws across. |
+| 3.7–6.5 s | 100–196 | Hold (≈ 5 s with every row visible). |
+| 6.5–8.0 s | 196–240 | Rows exit in order, title follows; hairline redraws full width (clean final frame). |
+Layout adapts to the data: ≤ 6 nominees → one large column; 7–14 → two columns with measured type sizes (long text ellipsised only as a last resort).
