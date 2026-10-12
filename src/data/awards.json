@@ -65,6 +65,157 @@
           "achievement": null
         }
       ]
+    },
+    {
+      "id": "entrepreneur-of-the-year",
+      "number": 2,
+      "name": "Entrepreneur of the Year Award",
+      "introTitle": {
+        "lines": ["Entrepreneur", "of the Year"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "entrepreneur-001",
+          "name": "Ted Pantone",
+          "business": "Turaco",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-002",
+          "name": "Ted Pantone ",
+          "business": "WorkPay",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-003",
+          "name": "Nick Joshi",
+          "business": "Leta",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-004",
+          "name": "Martin Freimuller",
+          "business": "Octavia Carbon",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-005",
+          "name": "Charlot Magayi",
+          "business": "Mukuru Clean Stoves",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-006",
+          "name": "Rose Goslinga",
+          "business": "Pula",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-007",
+          "name": "Diana Orembe",
+          "business": "NovFeed",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-008",
+          "name": "Abraham Mbuthia",
+          "business": "Uzapoint",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-009",
+          "name": "Adriaan Kruger",
+          "business": "nuvoteQ",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-010",
+          "name": "Baraka Chijenga",
+          "business": "Kilimo Fresh",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-011",
+          "name": "Gohar Zaki",
+          "business": " Suplyd",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-012",
+          "name": "Janet Kuteli ",
+          "business": "Fortune Credit",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-013",
+          "name": "Luther Lawoyin",
+          "business": "Pricepally",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "entrepreneur-014",
+          "name": "Peter Karenge Ng’ang’a",
+          "business": "BizSolutions 360 - B360",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
     }
   ]
 }
