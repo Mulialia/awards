@@ -68,6 +68,10 @@ otherwise the name is auto-fitted. No component changes are required.
 ## 3. Rendering
 
 ```bash
+# What can I render?  List the categories, then print the three filled-in steps for one of them
+node scripts/list-categories.mjs                 # category ids + which artefacts already exist under out/
+node scripts/category-steps.mjs <categoryId>     # 1) silent clips  2) soundtrack  3) mix audio in
+
 # One category, everything (intro + one file per nominee + continuous sequence) — silent masters
 node scripts/render-category.mjs youth-creative-business-concept
 #   → out/youth-creative-business-concept/00-category-intro.mp4
@@ -160,6 +164,10 @@ src/
 Fonts: Fraunces and Manrope (SIL Open Font License 1.1, copies in `public/fonts`). Logo artwork: © YORA, extracted unaltered from the supplied letterhead. Placeholder audio: synthesised in-house, no third-party material. Remotion has its own licence terms for companies — review https://www.remotion.dev/license before commercial use.
 
 ## Scripts
+
+`node scripts/list-categories.mjs` lists the available categories (ids, nominee counts, artefacts
+already in `out/`); `node scripts/category-steps.mjs <id>` prints the three steps below for any one
+category, filled in with its own values. The hand-listed recipes:
 
 1. Youth Creative Business Concept
    node scripts/render-category.mjs youth-creative-business-concept
