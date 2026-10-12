@@ -2,7 +2,7 @@
   "event": {
     "name": "YORA Entrepreneurial Awards",
     "brand": "YORA",
-    "year": null
+    "year": 2026
   },
   "categories": [
     {
@@ -20,8 +20,8 @@
           "business": "Travelvia Friends & Explorers",
           "title": null,
           "country": null,
-          "portrait": null,
-          "companyLogo": null,
+          "portrait": "portraits/youth-001.jpg",
+          "companyLogo": "logos/company/travelvia.jpg",
           "achievement": null
         },
         {
@@ -30,7 +30,7 @@
           "business": "Trust Agro Processors",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/youth-002.jpg",
           "companyLogo": null,
           "achievement": null
         },
@@ -40,7 +40,7 @@
           "business": "Mafi Caree",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/youth-003.jpg",
           "companyLogo": null,
           "achievement": null
         },
@@ -50,7 +50,7 @@
           "business": "Vitromatic Technologies",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/youth-004.jpg",
           "companyLogo": null,
           "achievement": null
         },
@@ -58,6 +58,1027 @@
           "id": "youth-005",
           "name": "Eunice Adewale",
           "business": "Smokeless Briqs Energy Solutions",
+          "title": null,
+          "country": null,
+          "portrait": "portraits/youth-005.jpg",
+          "companyLogo": "logos/company/smokelessbriggs.jpg",
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "climate-resilient-business-strategy",
+      "number": 2,
+      "name": "Climate-Resilient Business Strategy Award",
+      "introTitle": {
+        "lines": ["Climate-Resilient", "Business Strategy"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "climate-001",
+          "name": "Peter Scott",
+          "business": "Burn Manufacturing",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "climate-002",
+          "name": "T. Patrick Walsh",
+          "business": "Sun King",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "climate-003",
+          "name": "Rose Goslinga / Thomas Njeru",
+          "business": "Pula",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "climate-004",
+          "name": "Charlot Magayi",
+          "business": "Mukuru Clean Stoves",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "climate-005",
+          "name": "Samir Ibrahim",
+          "business": "SunCulture",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "climate-006",
+          "name": "Eli Pollak",
+          "business": "Apollo Agriculture",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "climate-007",
+          "name": "Diana Orembe",
+          "business": "NovFeed",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "promising-women-entrepreneurs",
+      "number": 3,
+      "name": "Promising Women Entrepreneurs Award",
+      "introTitle": {
+        "lines": ["Promising Women", "Entrepreneurs"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "women-001",
+          "name": "Sumarie Greybe",
+          "business": "Naked Insurance",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "women-002",
+          "name": "Charlot Magayi",
+          "business": "Mukuru Clean Stoves",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "women-003",
+          "name": "Alexandra Miszewski",
+          "business": "Altera Biosciences",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "women-004",
+          "name": "Rose Goslinga",
+          "business": "Pula",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "women-005",
+          "name": "Diana Orembe",
+          "business": "NovFeed",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "women-006",
+          "name": "Jane Kuteli",
+          "business": "Fortune Credit",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "women-007",
+          "name": "Caroline van der Merwe",
+          "business": "Jem HR",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "most-innovative-business-concept",
+      "number": 4,
+      "name": "Most Innovative Business Concept Award",
+      "introTitle": {
+        "lines": ["Most Innovative", "Business Concept"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "innovative-001",
+          "name": "Ayoola Dominic",
+          "business": "Koolboks",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "innovative-002",
+          "name": "Dr. Jaishree Naidoo",
+          "business": "Envisionit Deep AI",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "innovative-003",
+          "name": "Yuma Sasaki",
+          "business": "Dodai",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "innovative-004",
+          "name": "Gur Geva & Marco Wagener",
+          "business": "iiDENTIFii",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "innovative-005",
+          "name": "Dr. Derrick Edem Akpalu",
+          "business": "Revna Biosciences",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "innovative-006",
+          "name": "John Kornik",
+          "business": "Plentify",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "innovative-007",
+          "name": "Owusu Akoto",
+          "business": "FreezeLink",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "business-impact-in-africa",
+      "number": 5,
+      "name": "Business Impact in Africa Award",
+      "introTitle": {
+        "lines": ["Business Impact", "in Africa"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "impact-001",
+          "name": "Jesse Moore",
+          "business": "M-KOPA",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "impact-002",
+          "name": "Olugbenga “GB” Agboola",
+          "business": "Flutterwave",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "impact-003",
+          "name": "Vinod Goel",
+          "business": "Jumia",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "impact-004",
+          "name": "Ham Serunjogi",
+          "business": "Chipper Cash",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "impact-005",
+          "name": "Peter Ndegwa",
+          "business": "Safaricom",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "impact-006",
+          "name": "Aliko Dangote",
+          "business": "Dangote Group",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "impact-007",
+          "name": "James Mwangi",
+          "business": "Equity Group Holdings",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "social-entrepreneurship-excellence",
+      "number": 6,
+      "name": "Social Entrepreneurship Excellence Award",
+      "introTitle": {
+        "lines": ["Social Entrepreneurship", "Excellence"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "social-001",
+          "name": "Ann Cotton OBE",
+          "business": "CAMFED - Campaign for Female Education",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-002",
+          "name": "Kennedy Odede",
+          "business": "SHOFCO - Shining Hope for Communities",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-003",
+          "name": "Wawira Njiru",
+          "business": "Food4Education",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-004",
+          "name": "Charlot Magayi",
+          "business": "Mukuru Clean Stoves",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-005",
+          "name": "Rose Goslinga",
+          "business": "Pula",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-006",
+          "name": "Peter Scott",
+          "business": "Burn Manufacturing",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-007",
+          "name": "Tony Elumelu",
+          "business": "Tony Elumelu Foundation",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "social-008",
+          "name": "Dr. Modesta Vesonder",
+          "business": "Katani Hospital",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "community-leadership",
+      "number": 7,
+      "name": "Community Leadership Award",
+      "introTitle": {
+        "lines": ["Community", "Leadership"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "community-001",
+          "name": "Kennedy Odede",
+          "business": "SHOFCO - Shining Hope for Communities",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "community-002",
+          "name": "Wawira Njiru",
+          "business": "Food4Education",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "community-003",
+          "name": "Angeline Murimirwa",
+          "business": "CAMFED - Campaign for Female Education",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "community-004",
+          "name": "Charlot Magayi",
+          "business": "Mukuru Clean Stoves",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "community-005",
+          "name": "Ann Cotton",
+          "business": "CAMFED - Campaign for Female Education",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "community-006",
+          "name": "Almaz Negash",
+          "business": "African Diaspora Network",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "community-007",
+          "name": "Linda Kamau",
+          "business": "AkiraChix",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "technology-innovation",
+      "number": 8,
+      "name": "Technology Innovation Award",
+      "introTitle": {
+        "lines": ["Technology", "Innovation"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "tech-001",
+          "name": "Martin Freimuller",
+          "business": "Octavia Carbon",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "tech-002",
+          "name": "Pius Odhiambo",
+          "business": "KISWATE Digital Register",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "tech-003",
+          "name": "Dr. Raishree Naidoo",
+          "business": "Envisionit Deep AI",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "tech-004",
+          "name": "Gur Geva & Marco Wagener",
+          "business": "iiDENTIFii",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "tech-005",
+          "name": "Brian Bosire",
+          "business": "UjuziKilimo Solutions",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "tech-006",
+          "name": "Nick Joshi",
+          "business": "Leta",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "sustainable-development-excellence",
+      "number": 9,
+      "name": "Sustainable Development Excellence Award",
+      "introTitle": {
+        "lines": ["Sustainable Development", "Excellence"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "sustainable-001",
+          "name": "Jesse Moore",
+          "business": "M-KOPA",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "sustainable-002",
+          "name": "Peter Scott",
+          "business": "Burn Manufacturing",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "sustainable-003",
+          "name": "Rose Goslinga",
+          "business": "Pula",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "sustainable-004",
+          "name": "Charlot Magayi",
+          "business": "Mukuru Clean Stoves",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "sustainable-005",
+          "name": "Wawira Njiru",
+          "business": "Food4Education",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "sustainable-006",
+          "name": "Kennedy Odede",
+          "business": "SHOFCO",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "sustainable-007",
+          "name": "T. Patrick Walsh",
+          "business": "Sun King",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "diaspora-media-excellence",
+      "number": 10,
+      "name": "Diaspora Media Excellence Award",
+      "introTitle": {
+        "lines": ["Diaspora Media", "Excellence"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "diaspora-001",
+          "name": "Jeremy Damaris",
+          "business": "Kenya Diaspora Media",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-002",
+          "name": "George Gichobi",
+          "business": "Radio Majuu",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-003",
+          "name": "Ali Bidawy",
+          "business": "Team One Mic - One Mic Show",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-004",
+          "name": "John Allan Nyamu",
+          "business": "Africa Uncensored",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-005",
+          "name": "Leonard Stiegeler",
+          "business": "Pulse Africa",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-006",
+          "name": "Nation Media Group",
+          "business": "The East African",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-007",
+          "name": "Martin Nielsen & Francis Amisi",
+          "business": "Mdundo",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "diaspora-008",
+          "name": "Bankole Oluwafemi",
+          "business": "Tech Cabal",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "startup-of-the-year",
+      "number": 11,
+      "name": "Startup of the Year Award",
+      "introTitle": {
+        "lines": ["Startup", "of the Year"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "startup-001",
+          "name": "Diana Orembe",
+          "business": "NovFeed - Tanzania",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-002",
+          "name": "Abraham Mbuthia",
+          "business": "Uzapoint - Kenya",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-003",
+          "name": "Wycliffe Omondi",
+          "business": "BuuPass - Kenya",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-004",
+          "name": "Jess Anuna",
+          "business": "Klasha",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-005",
+          "name": "Dr. Polly Okello",
+          "business": "Medbook Kenya",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-006",
+          "name": "Jane Kuteli",
+          "business": "Fortune Credit - Kenya",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-007",
+          "name": "Gohar Said",
+          "business": "Suplyd - Egypt",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-008",
+          "name": "Sneha Mehta",
+          "business": "Uncover",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-009",
+          "name": "Ikechukwu Arthur Anoke",
+          "business": "Zuri Health",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-010",
+          "name": "Brian Bosire",
+          "business": "UjuziKilimo Solutions",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-011",
+          "name": "Samir Ibrahim",
+          "business": "SunCulture",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-012",
+          "name": "Jesse Moore",
+          "business": "M-KOPA",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "startup-013",
+          "name": "Stephen Jennings",
+          "business": "Tatu City",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "film-and-performing-arts-excellence",
+      "number": 12,
+      "name": "Film and Performing Arts Excellence Award",
+      "introTitle": {
+        "lines": ["Film and Performing Arts", "Excellence"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "film-001",
+          "name": "Muthoni Ndong’a",
+          "business": "Blankets & Wine",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-002",
+          "name": "Romain Mari",
+          "business": "Beneath the Baobabs Festival",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-003",
+          "name": "Kevin Mwachiro",
+          "business": "Kilifi Creek Festival",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-004",
+          "name": "Zippy Kimundu",
+          "business": "The Terrace Residency and Art Space",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-005",
+          "name": "Sauti Sol Group",
+          "business": "Sol Generation Records",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-006",
+          "name": "Oluwatosin “Mr Eazi” Ajibade",
+          "business": "emPawa Africa",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-007",
+          "name": "Martin Nielsen & Francis Amisi",
+          "business": "Mdundo",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-008",
+          "name": "Michael Collins Ajereh “Don Jazzy”",
+          "business": "Mavin Records",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-009",
+          "name": "Audu Maikori & Paul Okeugo",
+          "business": "Chocolate City Music",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-010",
+          "name": "Abdul Karim Abdullah",
+          "business": "AfroFuture Festival",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-011",
+          "name": "Yeni Anikulapo Kuti",
+          "business": "Felabration",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-012",
+          "name": "Derek Debru & Arlen Dilsizian",
+          "business": "Nyege Nyege Festival",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "film-013",
+          "name": "Mo Abudu",
+          "business": "Ebony Life Media",
           "title": null,
           "country": null,
           "portrait": null,
@@ -68,8 +1089,8 @@
     },
     {
       "id": "entrepreneur-of-the-year",
-      "number": 2,
-      "name": "Entrepreneur of the Year Award",
+      "number": 13,
+      "name": "Entrepreneur of the Year",
       "introTitle": {
         "lines": ["Entrepreneur", "of the Year"],
         "suffix": "Award"
@@ -178,7 +1199,7 @@
         {
           "id": "entrepreneur-011",
           "name": "Gohar Zaki",
-          "business": " Suplyd",
+          "business": "Suplyd",
           "title": null,
           "country": null,
           "portrait": null,
@@ -187,7 +1208,7 @@
         },
         {
           "id": "entrepreneur-012",
-          "name": "Janet Kuteli ",
+          "name": "Janet Kuteli",
           "business": "Fortune Credit",
           "title": null,
           "country": null,
@@ -209,6 +1230,87 @@
           "id": "entrepreneur-014",
           "name": "Peter Karenge Ng’ang’a",
           "business": "BizSolutions 360 - B360",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        }
+      ]
+    },
+    {
+      "id": "lifetime-achievement",
+      "number": 14,
+      "name": "Lifetime Achievement Award",
+      "introTitle": {
+        "lines": ["Lifetime", "Achievement"],
+        "suffix": "Award"
+      },
+      "nominees": [
+        {
+          "id": "lifetime-001",
+          "name": "Strive Masiyiwa",
+          "business": "Econet",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "lifetime-002",
+          "name": "Dr. Modesta Vesonder",
+          "business": "Katani Hospital",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "lifetime-003",
+          "name": "Aliko Dangote",
+          "business": "Dangote Group",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "lifetime-004",
+          "name": "Ibukun Awosika",
+          "business": "The Chair Centre Group",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "lifetime-005",
+          "name": "Tabitha Karanja",
+          "business": "Keroche Breweries",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "lifetime-006",
+          "name": "Tony Elumelu",
+          "business": "The Tony Elumelu Foundation",
+          "title": null,
+          "country": null,
+          "portrait": null,
+          "companyLogo": null,
+          "achievement": null
+        },
+        {
+          "id": "lifetime-007",
+          "name": "Naguib Sawiris",
+          "business": "Orascom Investment Holding",
           "title": null,
           "country": null,
           "portrait": null,

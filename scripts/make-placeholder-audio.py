@@ -19,10 +19,10 @@ import numpy as np
 from scipy.signal import butter, sosfilt, fftconvolve
 
 SR = 48000
-T = json.load(open('src/data/timing.json'))
+T = json.load(open('src/data/timing.json', encoding='utf-8'))
 FPS, INTRO, NOMF, ROST = T['fps'], T['introFrames'], T['nomineeFrames'], T['rosterFrames']
 
-AWARDS = json.load(open('src/data/awards.json'))
+AWARDS = json.load(open('src/data/awards.json', encoding='utf-8'))
 CATS = {c['id']: c for c in AWARDS['categories']}
 arg = sys.argv[1] if len(sys.argv) > 1 else AWARDS['categories'][0]['id']
 if arg in CATS:                      # per-category master (recommended)

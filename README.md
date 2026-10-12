@@ -110,9 +110,9 @@ Cue frames (for composers): see `INTRO` and `NOM` in `src/utils/timing.ts` — e
 
 # Render Summary
 
-node scripts/render-category.mjs youth-creative-business-concept
-python scripts/make-placeholder-audio.py 5 out/audio/youth-creative-business-concept.wav
-node scripts/mux-audio.mjs youth-creative-business-concept out/audio/youth-creative-business-concept.wav
+node scripts/render-category.mjs climate-resilient-business-strategy
+python scripts/make-placeholder-audio.py 7 out/audio/climate-resilient-business-strategy.wav
+node scripts/mux-audio.mjs climate-resilient-business-strategy out/audio/climate-resilient-business-strategy.wav
 
 ## 4. Architecture
 
@@ -158,3 +158,75 @@ src/
 ## 6. Licences
 
 Fonts: Fraunces and Manrope (SIL Open Font License 1.1, copies in `public/fonts`). Logo artwork: © YORA, extracted unaltered from the supplied letterhead. Placeholder audio: synthesised in-house, no third-party material. Remotion has its own licence terms for companies — review https://www.remotion.dev/license before commercial use.
+
+## Scripts
+
+1. Youth Creative Business Concept
+   node scripts/render-category.mjs youth-creative-business-concept
+   python scripts/make-placeholder-audio.py 5 out/audio/youth-creative-business-concept.wav
+   node scripts/mux-audio.mjs youth-creative-business-concept out/audio/youth-creative-business-concept.wav
+
+2. Climate-Resilient Business Strategy Award
+   node scripts/render-category.mjs climate-resilient-business-strategy
+   python scripts/make-placeholder-audio.py 7 out/audio/climate-resilient-business-strategy.wav
+   node scripts/mux-audio.mjs climate-resilient-business-strategy out/audio/climate-resilient-business-strategy.wav
+
+3. Promising Women Entrepreneurs Award
+   node scripts/render-category.mjs promising-women-entrepreneurs
+   python scripts/make-placeholder-audio.py 7 out/audio/promising-women-entrepreneurs.wav
+   node scripts/mux-audio.mjs promising-women-entrepreneurs out/audio/promising-women-entrepreneurs.wav
+
+4. Most Innovative Business Concept Award
+   node scripts/render-category.mjs most-innovative-business-concept
+   python scripts/make-placeholder-audio.py 7 out/audio/most-innovative-business-concept.wav
+   node scripts/mux-audio.mjs most-innovative-business-concept out/audio/most-innovative-business-concept.wav
+
+5. Business Impact in Africa Award
+   node scripts/render-category.mjs business-impact-in-africa
+   python scripts/make-placeholder-audio.py 7 out/audio/business-impact-in-africa.wav
+   node scripts/mux-audio.mjs business-impact-in-africa out/audio/business-impact-in-africa.wav
+
+6. Social Entrepreneurship Excellence Award
+   node scripts/render-category.mjs social-entrepreneurship-excellence
+   python scripts/make-placeholder-audio.py 8 out/audio/social-entrepreneurship-excellence.wav
+   node scripts/mux-audio.mjs social-entrepreneurship-excellence out/audio/social-entrepreneurship-excellence.wav
+
+7. Community Leadership Award
+   node scripts/render-category.mjs community-leadership
+   python scripts/make-placeholder-audio.py 7 out/audio/community-leadership.wav
+   node scripts/mux-audio.mjs community-leadership out/audio/community-leadership.wav
+
+8. Technology Innovation Award
+   node scripts/render-category.mjs technology-innovation
+   python scripts/make-placeholder-audio.py 6 out/audio/technology-innovation.wav
+   node scripts/mux-audio.mjs technology-innovation out/audio/technology-innovation.wav
+
+9. Sustainable Development Excellence Award
+   node scripts/render-category.mjs sustainable-development-excellence
+   python scripts/make-placeholder-audio.py 7 out/audio/sustainable-development-excellence.wav
+   node scripts/mux-audio.mjs sustainable-development-excellence out/audio/sustainable-development-excellence.wav
+
+10. Diaspora Media Excellence Award
+    node scripts/render-category.mjs diaspora-media-excellence
+    python scripts/make-placeholder-audio.py 8 out/audio/diaspora-media-excellence.wav
+    node scripts/mux-audio.mjs diaspora-media-excellence out/audio/diaspora-media-excellence.wav
+
+11. Startup of the Year Award
+    node scripts/render-category.mjs startup-of-the-year
+    python scripts/make-placeholder-audio.py 13 out/audio/startup-of-the-year.wav
+    node scripts/mux-audio.mjs startup-of-the-year out/audio/startup-of-the-year.wav
+
+12. Film and Performing Arts Excellence Award
+    node scripts/render-category.mjs film-and-performing-arts-excellence
+    python scripts/make-placeholder-audio.py 13 out/audio/film-and-performing-arts-excellence.wav
+    node scripts/mux-audio.mjs film-and-performing-arts-excellence out/audio/film-and-performing-arts-excellence.wav
+
+13. Entrepreneur of the Year
+    node scripts/render-category.mjs entrepreneur-of-the-year
+    python scripts/make-placeholder-audio.py 14 out/audio/entrepreneur-of-the-year.wav
+    node scripts/mux-audio.mjs entrepreneur-of-the-year out/audio/entrepreneur-of-the-year.wav
+
+14. Lifetime Achievement Award
+    node scripts/render-category.mjs lifetime-achievement
+    python scripts/make-placeholder-audio.py 7 out/audio/lifetime-achievement.wav
+    node scripts/mux-audio.mjs lifetime-achievement out/audio/lifetime-achievement.wav
