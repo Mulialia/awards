@@ -110,9 +110,9 @@ Cue frames (for composers): see `INTRO` and `NOM` in `src/utils/timing.ts` — e
 
 # Render Summary
 
-node scripts/render-category.mjs entrepreneur-of-the-year
-python scripts/make-placeholder-audio.py 5 out/audio/entrepreneur-of-the-year.wav
-node scripts/mux-audio.mjs entrepreneur-of-the-year out/audio/entrepreneur-of-the-year.wav
+node scripts/render-category.mjs youth-creative-business-concept
+python scripts/make-placeholder-audio.py 5 out/audio/youth-creative-business-concept.wav
+node scripts/mux-audio.mjs youth-creative-business-concept out/audio/youth-creative-business-concept.wav
 
 ## 4. Architecture
 

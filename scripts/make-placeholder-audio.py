@@ -129,8 +129,7 @@ for i in range(N):                                                       # one s
     put(pluck(A[['A3','C4','E4','G4','A4','C5','D4'][i % 7]], 1.4), RS(34 + i * 8), pan=-0.3 + 0.6 * (i % 3) / 2, gain=0.1)
 put(bell(A['E4'], 5.0), RS(34 + N * 8 + 14), gain=0.12)                  # resolve
 put(bell(A['A4'], 5.5, 0.6), RS(34 + N * 8 + 18), gain=0.1)
-put(noise_sweep(1.3, 3800, 500, False), RS(196), gain=0.1)
-put(noise_sweep(0.95, 700, 5500, True), RS(212), gain=0.07)
+# No exit cues: the roster holds on the full nominee list through the final frame.
 
 # ── space & master ───────────────────────────────────────────────────────────────────────────
 def reverb(x, secs=2.8, seed=1):

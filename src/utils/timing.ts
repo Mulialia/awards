@@ -62,13 +62,14 @@ export const NOM = {
   hairlineOut: [128, 150],
 } as const;
 
-/** Closing roster — local frames (0 … ROSTER_FRAMES). */
+/**
+ * Closing roster — local frames (0 … ROSTER_FRAMES).
+ * No exit stage: the scene holds on the complete list so the LAST FRAME shows every nominee.
+ */
 export const ROSTER = {
   gateCollapse: [0, 22],
   title: [8, 40],
   rowsStart: 34,
   rowStagger: 8,
   rowDur: 28,
-  exitStart: 196,
-  hairlineOut: [212, 240],
 } as const;

@@ -34,6 +34,5 @@
 | 0.0–0.7 s | 0–22 | Inherited hairline collapses to centre. |
 | 0.3–1.3 s | 8–40 | "THE NOMINEES" eyebrow and the category title (same line breaks as the intro) rise into the left rail. |
 | 1.1–3.7 s | 34–100 | Nominee rows rise in presentation order (8-frame stagger): number · name · business, each over a gold hairline that draws across. |
-| 3.7–6.5 s | 100–196 | Hold (≈ 5 s with every row visible). |
-| 6.5–8.0 s | 196–240 | Rows exit in order, title follows; hairline redraws full width (clean final frame). |
+| 3.7–8.0 s | 100–240 | Hold with every row (and the heading) fully visible through the end — **last frame = the complete nominee list** (no exit, hairline stays collapsed). |
 Layout adapts to the data: ≤ 6 nominees → one large column; 7–14 → two columns with measured type sizes (long text ellipsised only as a last resort).
