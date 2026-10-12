@@ -67,6 +67,33 @@ otherwise the name is auto-fitted. No component changes are required.
 
 ## 3. Rendering
 
+### The web editor (recommended for non-technical operators)
+
+```bash
+npm run editor          # → http://127.0.0.1:4173   (stop with Ctrl+C)
+```
+
+A local, zero-dependency web UI that covers the whole process end to end:
+
+- **Nominees tab** — view every nominee as a card with their photo, add/edit/reorder/delete them
+  (name, business, title, country, achievement, portrait + crop focus, company logo), pick media
+  from the library or upload new files inline, and render a **preview still** of any nominee or intro.
+- **Category tab** — event details plus the category name/number/id and the intro title lines.
+- **Media tab** — drag-and-drop upload of portraits and company logos into `public/`, with usage
+  info and safe deletion (files still referenced by a nominee are protected; template artwork in
+  `public/logos/` is view-only).
+- **Audio tab** — upload the polished per-category soundtrack (music **+ voice-over**, stereo
+  48 kHz, whole sequence — WAV/MP3/M4A/AAC/FLAC/OGG), preview it, remove it, or generate the
+  placeholder.
+- **Pipeline tab** — run the three steps (render silent clips → soundtrack → mix) with **live
+  logs**, stop/queue control, and browse/open/download the finished MP4s.
+
+The editor edits `src/data/awards.json` through the same validator as `npm run validate` (saving is
+blocked while errors exist; a live issue list is shown at the top), and jobs run the very same
+scripts documented below — so the CLI workflow stays fully supported.
+
+### Scripts
+
 ```bash
 # What can I render?  List the categories, then print the three filled-in steps for one of them
 node scripts/list-categories.mjs                 # category ids + which artefacts already exist under out/

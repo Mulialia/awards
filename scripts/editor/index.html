@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YORA Awards — Editor</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">◆</span> <strong>YORA</strong> Awards Editor</div>
+    <div class="topbar-right">
+      <span id="validationPill" class="pill">…</span>
+      <span id="saveState" class="pill muted">Saved</span>
+      <button id="btnSave" class="btn primary" disabled>Save</button>
+    </div>
+  </header>
+
+  <div id="issues" class="issues hidden"></div>
+  <div id="dirtyBanner" class="dirty-banner hidden">
+    Unsaved changes — press <kbd>Save</kbd> (or Ctrl+S) to apply them to the data file.
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <span>Categories</span>
+        <button id="btnAddCategory" class="btn small" title="Add a category">＋ Add</button>
+      </div>
+      <nav id="categoryList" class="category-list"></nav>
+      <div class="sidebar-foot" id="sidebarFoot"></div>
+    </aside>
+
+    <main class="main">
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="nominees">Nominees</button>
+        <button class="tab" data-tab="category">Category</button>
+        <button class="tab" data-tab="media">Media</button>
+        <button class="tab" data-tab="audio">Audio</button>
+        <button class="tab" data-tab="pipeline">Pipeline</button>
+      </nav>
+
+      <section id="tab-nominees" class="panel active"></section>
+      <section id="tab-category" class="panel"></section>
+      <section id="tab-media" class="panel"></section>
+      <section id="tab-audio" class="panel"></section>
+      <section id="tab-pipeline" class="panel"></section>
+    </main>
+  </div>
+
+  <div id="modalRoot" class="modal-backdrop hidden"><div id="modalCard" class="modal-card"></div></div>
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

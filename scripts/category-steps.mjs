@@ -4,6 +4,7 @@
 // Display only — it never runs anything; paste the printed commands (or chain them with &&) to execute.
 // The python launcher is chosen per platform (Windows ships `python`, POSIX `python3`).
 import fs from 'node:fs';
+import {findSoundtrack} from './soundtrack.mjs';
 
 const args = process.argv.slice(2);
 const categoryId = args.find((a) => !a.startsWith('--'));
@@ -30,7 +31,8 @@ const status = (p) => `   status:  ${fs.existsSync(p) ? '✓ exists — ' : '· 
 
 const outDir = `out/${categoryId}`;
 const silentSeq = `${outDir}/category-sequence-silent.mp4`;
-const wav = `out/audio/${categoryId}-soundtrack.wav`;
+const track = findSoundtrack(categoryId);
+const wav = track ? track.replace(/\\/g, '/') : `out/audio/${categoryId}-soundtrack.wav`;
 const mixedSeq = `${outDir}/with-audio/category-sequence.mp4`;
 
 console.log(`${category.number}. ${category.name}  —  ${categoryId}`);
@@ -43,7 +45,9 @@ console.log(status(silentSeq));
 
 console.log(`\n2. Soundtrack  →  ${wav}`);
 console.log(`   ${py} scripts/make-placeholder-audio.py ${categoryId}`);
-console.log(`   synthesises a ${seconds} s stereo 48 kHz master sized to the ${n} nominees (reads src/data/timing.json)`);
+console.log(track
+  ? '   a soundtrack is already in place — run only to replace it with the placeholder'
+  : `   synthesises a ${seconds} s stereo 48 kHz master sized to the ${n} nominees (reads src/data/timing.json); or upload a finished track (music + voice-over) in the editor — npm run editor`);
 console.log(status(wav));
 
 console.log(`\n3. Mix the audio into the silent clips  →  ${outDir}/with-audio/`);

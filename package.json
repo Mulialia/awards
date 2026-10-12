@@ -7,6 +7,7 @@
     "dev": "remotion studio src/index.ts",
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-data.mjs",
+    "editor": "node scripts/editor-server.mjs",
     "categories": "node scripts/list-categories.mjs",
     "steps": "node scripts/category-steps.mjs",
     "still:direction": "remotion still src/index.ts NomineeReveal out/stills/nominee-reveal.png --frame=110 --props='{\"categoryId\":\"youth-creative-business-concept\",\"nomineeId\":\"youth-001\"}'",

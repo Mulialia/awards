@@ -3,17 +3,17 @@
 // Reads  out/<categoryId>/*.mp4 (silent)  →  writes out/<categoryId>/with-audio/*.mp4
 // Audio for each clip is cut from the master track at the clip's position in the sequence, so
 // every individual file and the full sequence share identical, frame-synchronised sound.
-// When no WAV is given, prefers the per-category master out/audio/<categoryId>-soundtrack.wav
-// (generate it with: python3 scripts/make-placeholder-audio.py <categoryId>), falling back to the
-// generic placeholder.
+// When no WAV is given, prefers the per-category master out/audio/<categoryId>-soundtrack.*
+// (upload your own or generate it with: python3 scripts/make-placeholder-audio.py <categoryId>),
+// falling back to the generic placeholder.
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import {findSoundtrack} from './soundtrack.mjs';
 
 const [categoryId, wavArg] = process.argv.slice(2);
 if (!categoryId) { console.error('Usage: node scripts/mux-audio.mjs <categoryId> [soundtrack.wav]'); process.exit(1); }
-const perCategory = path.join('out', 'audio', `${categoryId}-soundtrack.wav`);
-const wav = wavArg ?? (fs.existsSync(perCategory) ? perCategory : 'out/audio/placeholder-soundtrack.wav');
+const wav = wavArg ?? findSoundtrack(categoryId) ?? 'out/audio/placeholder-soundtrack.wav';
 if (!fs.existsSync(wav)) {
   console.error(`Soundtrack not found: ${wav}\nGenerate it with: python3 scripts/make-placeholder-audio.py ${categoryId}`);
   process.exit(1);

@@ -5,6 +5,7 @@
 // The silent / wav / mix columns show which production artefacts already exist under out/.
 import fs from 'node:fs';
 import path from 'node:path';
+import {findSoundtrack} from './soundtrack.mjs';
 
 const awards = JSON.parse(fs.readFileSync('src/data/awards.json', 'utf8'));
 const timing = JSON.parse(fs.readFileSync('src/data/timing.json', 'utf8'));
@@ -18,7 +19,7 @@ const rows = awards.categories.map((c) => {
     nominees: c.nominees.length,
     seconds: frames / timing.fps,
     silent: fs.existsSync(path.join('out', c.id, 'category-sequence-silent.mp4')),
-    wav: fs.existsSync(path.join('out', 'audio', `${c.id}-soundtrack.wav`)),
+    wav: findSoundtrack(c.id) !== null,
     mix: fs.existsSync(path.join('out', c.id, 'with-audio', 'category-sequence.mp4')),
   };
 });
