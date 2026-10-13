@@ -2,6 +2,7 @@
   "name": "yora-awards-motion",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "YORA Entrepreneurial Awards — data-driven nominee presentation system (Remotion)",
   "scripts": {
     "dev": "remotion studio src/index.ts",
