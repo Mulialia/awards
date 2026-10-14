@@ -325,7 +325,11 @@ function openNomineeModal(index) {
         achievement: get('achievement').trim() || null,
       };
       if (!data.name || !data.business || !data.id) return toast('Name, business and ID are required', true);
-      const dup = S.awards.categories.some((x) => x.nominees.some((o) => o.id === data.id && !(x === c && o === n)));
+      // Exclude only the slot being edited — by position, because `n` is a copy of the stored
+      // nominee (object identity would never match and flag the nominee against itself).
+      const dup = S.awards.categories.some((x) =>
+        x.nominees.some((o, oi) => o.id === data.id && !(x.id === c.id && oi === index)),
+      );
       if (dup) return toast(`ID "${data.id}" is already used by another nominee`, true);
       if (isNew) c.nominees.push(data);
       else c.nominees[index] = data;
