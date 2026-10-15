@@ -621,7 +621,8 @@
           "business": "Octavia Carbon",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/tech-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -631,7 +632,8 @@
           "business": "KISWATE Digital Register",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/tech-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -641,7 +643,8 @@
           "business": "Envisionit Deep AI",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/tech-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -651,7 +654,8 @@
           "business": "iiDENTIFii",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/tech-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -661,7 +665,8 @@
           "business": "UjuziKilimo Solutions",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/tech-005.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -671,7 +676,8 @@
           "business": "Leta",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/tech-006.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }
@@ -692,7 +698,8 @@
           "business": "M-KOPA",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/sustainable-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -702,7 +709,8 @@
           "business": "Burn Manufacturing",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -712,7 +720,8 @@
           "business": "Pula",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -722,7 +731,8 @@
           "business": "Mukuru Clean Stoves",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -732,7 +742,8 @@
           "business": "Food4Education",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/community-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -742,7 +753,8 @@
           "business": "SHOFCO",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/community-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -752,7 +764,8 @@
           "business": "Sun King",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }
@@ -773,7 +786,8 @@
           "business": "Kenya Diaspora Media",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -783,7 +797,8 @@
           "business": "Radio Majuu",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -793,7 +808,8 @@
           "business": "Team One Mic - One Mic Show",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -803,7 +819,8 @@
           "business": "Africa Uncensored",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -813,7 +830,8 @@
           "business": "Pulse Africa",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-005.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -823,7 +841,8 @@
           "business": "The East African",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-006.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -833,7 +852,8 @@
           "business": "Mdundo",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-007.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -843,7 +863,8 @@
           "business": "Tech Cabal",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/diaspora-008.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }
@@ -864,7 +885,8 @@
           "business": "NovFeed - Tanzania",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -874,7 +896,8 @@
           "business": "Uzapoint - Kenya",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -884,7 +907,8 @@
           "business": "BuuPass - Kenya",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -894,7 +918,8 @@
           "business": "Klasha",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -904,7 +929,8 @@
           "business": "Medbook Kenya",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-005.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -914,7 +940,8 @@
           "business": "Fortune Credit - Kenya",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-006.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -924,7 +951,8 @@
           "business": "Suplyd - Egypt",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-007.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -934,7 +962,8 @@
           "business": "Uncover",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-008.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -944,7 +973,8 @@
           "business": "Zuri Health",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-009.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -954,7 +984,8 @@
           "business": "UjuziKilimo Solutions",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-010.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -964,7 +995,8 @@
           "business": "SunCulture",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-011.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -974,7 +1006,8 @@
           "business": "M-KOPA",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-012.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -984,7 +1017,8 @@
           "business": "Tatu City",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/startup-013.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }
@@ -1005,7 +1039,8 @@
           "business": "Blankets & Wine",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1015,7 +1050,8 @@
           "business": "Beneath the Baobabs Festival",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1025,7 +1061,8 @@
           "business": "Kilifi Creek Festival",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1035,7 +1072,8 @@
           "business": "The Terrace Residency and Art Space",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1045,7 +1083,8 @@
           "business": "Sol Generation Records",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-005.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1055,7 +1094,8 @@
           "business": "emPawa Africa",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-006.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1065,7 +1105,8 @@
           "business": "Mdundo",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-007.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1075,7 +1116,8 @@
           "business": "Mavin Records",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-008.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1085,7 +1127,8 @@
           "business": "Chocolate City Music",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-009.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1095,7 +1138,8 @@
           "business": "AfroFuture Festival",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-010.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1105,7 +1149,8 @@
           "business": "Felabration",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-011.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1115,7 +1160,8 @@
           "business": "Nyege Nyege Festival",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-012.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1125,7 +1171,8 @@
           "business": "Ebony Life Media",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/film-013.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }
@@ -1146,7 +1193,8 @@
           "business": "Turaco",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1156,7 +1204,8 @@
           "business": "WorkPay",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1166,7 +1215,8 @@
           "business": "Leta",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1176,7 +1226,8 @@
           "business": "Octavia Carbon",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1186,7 +1237,8 @@
           "business": "Mukuru Clean Stoves",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1196,7 +1248,8 @@
           "business": "Pula",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1206,7 +1259,8 @@
           "business": "NovFeed",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-007.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1216,7 +1270,8 @@
           "business": "Uzapoint",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-008.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1226,7 +1281,8 @@
           "business": "nuvoteQ",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-009.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1236,7 +1292,8 @@
           "business": "Kilimo Fresh",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-010.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1246,7 +1303,8 @@
           "business": "Suplyd",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-011.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1256,7 +1314,8 @@
           "business": "Fortune Credit",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-012.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1266,7 +1325,8 @@
           "business": "Pricepally",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-013.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1276,7 +1336,8 @@
           "business": "BizSolutions 360 - B360",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/entrepreneur-014.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }
@@ -1297,7 +1358,8 @@
           "business": "Econet",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-001.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1307,7 +1369,8 @@
           "business": "Katani Hospital",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-002.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1317,7 +1380,8 @@
           "business": "Dangote Group",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-003.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1327,7 +1391,8 @@
           "business": "The Chair Centre Group",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-004.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1337,7 +1402,8 @@
           "business": "Keroche Breweries",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-005.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1347,7 +1413,8 @@
           "business": "The Tony Elumelu Foundation",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-006.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         },
@@ -1357,7 +1424,8 @@
           "business": "Orascom Investment Holding",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/lifetime-007.jpg",
+          "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
         }

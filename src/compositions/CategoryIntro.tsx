@@ -4,7 +4,7 @@ import {BackgroundAtmosphere} from '../components/BackgroundAtmosphere';
 import {CategoryTitle, layoutIntroTitle, TITLE_LEFT} from '../components/CategoryTitle';
 import {Chrome} from '../components/Chrome';
 import {GateLine} from '../components/AwardsTransition';
-import {YoraLockupPlate} from '../components/YoraLogo';
+import {YoraLockup} from '../components/YoraLogo';
 import {getCategory} from '../data';
 import type {Category, CategoryProps} from '../data/types';
 import {easeInOut, easeOut, lerp, prog} from '../utils/motion';
@@ -39,8 +39,8 @@ export const IntroContent: React.FC<{category: Category}> = ({category}) => {
     <AbsoluteFill>
       <GateLine left={left} right={right} y={y} />
       {plateOpacity > 0 && (
-        <div style={{position: 'absolute', left: WIDTH / 2 - 180, top: HEIGHT / 2 - 235}}>
-          <YoraLockupPlate scale={lerp(0.93, 1, plateIn) * lerp(1, 1.04, plateOut)} opacity={plateOpacity} />
+        <div style={{position: 'absolute', left: WIDTH / 2 - 260, top: HEIGHT / 2 - 310}}>
+          <YoraLockup scale={lerp(0.93, 1, plateIn) * lerp(1, 1.04, plateOut)} opacity={plateOpacity} />
         </div>
       )}
       <CategoryTitle category={category} frame={frame} />
