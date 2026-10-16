@@ -6,8 +6,10 @@
 // that point is untouched, `hold` seconds are spliced in, and everything after (every nominee cue,
 // the roster chimes) shifts later by exactly the hold — so audio and video stay frame-locked.
 // The inserted segment (default --fill=bed): the track's OWN ambience — a punctuation-free window
-// (the hum/pad, no bells/sweeps/sub hits) is detected and crossfade-looped to fill the hold, so the
+// (the hum/pad, no bells/sweeps/sub hits) is detected and crossfade-looped to fill the gap, so the
 // bed keeps breathing under the spoken intro. --fill=silence splices a clean silent pocket instead.
+// --if-short: exit 0 (instead of refusing) when the track is not shorter than the video — used by
+// the editor's Full pipeline, where a finished full-length track with a baked-in VO is legitimate.
 // When it edits a file in place it first copies the original to out/audio/backup/.
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
@@ -20,7 +22,7 @@ const flag = (n) => args.find((a) => a.startsWith(`--${n}=`))?.split('=')[1];
 const has = (n) => args.includes(`--${n}`);
 
 if (!categoryId || !/^[\w.-]+$/.test(categoryId)) {
-  console.error('Usage: node scripts/stretch-audio.mjs <categoryId> [--in=file] [--out=file] [--seconds=s] [--at=frame] [--fill=bed|silence] [--window=start:end] [--fade=s] [--dry-run] [--force]');
+  console.error('Usage: node scripts/stretch-audio.mjs <categoryId> [--in=file] [--out=file] [--seconds=s] [--at=frame] [--fill=bed|silence] [--window=start:end] [--fade=s] [--if-short] [--dry-run] [--force]');
   process.exit(1);
 }
 
@@ -84,6 +86,10 @@ if (holdSecOverride != null) {
   }
 } else {
   if (dur > expected + 0.1 && !has('force')) {
+    if (has('if-short')) {
+      console.log(`Track is not shorter than the video (${dur.toFixed(1)} s ≥ ${expected.toFixed(1)} s) — nothing to insert.`);
+      process.exit(0);
+    }
     console.error(`\nThe track is LONGER than the video (${dur.toFixed(1)} s > ${expected.toFixed(1)} s) — refusing to cut anything.`);
     console.error('Replace/regenerate the track (editor → Audio tab), or pass --seconds=<s> / --force.');
     process.exit(1);

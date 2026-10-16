@@ -50,6 +50,18 @@ const clips = [
   {file: 'category-sequence-silent.mp4', start: 0, frames: introFrames + category.nominees.length * timing.nomineeFrames + timing.rosterFrames, outName: 'category-sequence.mp4'},
 ];
 
+// Refuse to mix a track that runs out before the video (it would produce dead audio from that
+// point on with no error) — extend it first instead. A LONGER track is fine: it gets trimmed.
+// Probe `norm` — the exact file the clips are cut from.
+const totalFrames = introFrames + category.nominees.length * timing.nomineeFrames + timing.rosterFrames;
+const masterDur = Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', norm]).toString().trim());
+if (masterDur + 0.1 < totalFrames / timing.fps && !process.argv.includes('--allow-short')) {
+  console.error(`Soundtrack is SHORTER than the video: ${masterDur.toFixed(1)} s < ${(totalFrames / timing.fps).toFixed(1)} s — the audio would end early.`);
+  console.error(`Extend it first:  node scripts/stretch-audio.mjs ${categoryId}`);
+  console.error('(or pass --allow-short to mix anyway)');
+  process.exit(1);
+}
+
 for (const c of clips) {
   const input = path.join(dir, c.file);
   if (!fs.existsSync(input)) { console.log('  skip (not rendered):', c.file); continue; }

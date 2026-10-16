@@ -83,7 +83,7 @@
           "business": "Burn Manufacturing",
           "title": null,
           "country": null,
-          "portrait": "portraits/climate-001.jpg",
+          "portrait": null,
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -155,7 +155,7 @@
           "achievement": null
         }
       ],
-      "introVoiceOverSeconds": 15
+      "introVoiceOverSeconds": 15.5
     },
     {
       "id": "promising-women-entrepreneurs",

@@ -260,8 +260,14 @@ function stepsFor(action, p) {
   if (action === 'mux') return [mux];
   if (action === 'stretch') return [stretch];
   if (action === 'pipeline') {
+    // With an existing soundtrack: render → keep it → extend it for the voice-over hold if the
+    // video grew (stretch no-ops when in sync / no VO; --if-short tolerates a baked full-length
+    // track) → mix. Without a soundtrack: generate the placeholder (bakes the hold in) → mix.
+    let voSet = false;
+    try { voSet = Number(readAwards().categories.find((c) => c.id === p.categoryId)?.introVoiceOverSeconds) > 0; } catch {}
     return findSoundtrack(p.categoryId, ROOT)
-      ? [render, {note: true, label: 'Soundtrack already present — keeping it'}, mux]
+      ? [render, {note: true, label: 'Soundtrack already present — keeping it'},
+         ...(voSet ? [{...stretch, args: [...stretch.args, '--if-short']}] : []), mux]
       : [render, audio, mux];
   }
   if (action === 'still') {

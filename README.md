@@ -83,6 +83,12 @@ npm run stretch:audio -- <categoryId>     # splices the missing seconds into the
 node scripts/mux-audio.mjs <categoryId>   # then re-mix the clips from the extended track
 ```
 
+No manual steps needed if you use the editor's **Full pipeline**: it now runs the extension
+automatically between rendering and mixing (only when the category has a voice-over set), and
+`mux-audio` refuses to mix a soundtrack that is shorter than the video (`--allow-short` overrides)
+instead of silently letting the audio run out. The field is **per category** — a category with no
+`introVoiceOverSeconds` keeps the standard 5.0 s intro and its original audio timing.
+
 The splice happens at **exactly the same point the video was stretched** (the frame the title
 starts leaving), so everything before it is untouched and every cue after it realigns. The gap is
 filled with the track's **own ambience** — a punctuation-free window (the hum/pad, no bells/sweeps
