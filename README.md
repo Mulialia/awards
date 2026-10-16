@@ -65,6 +65,36 @@ Append an object to `categories` with a unique `id`, `number`, `name` and `nomin
 Optional `introTitle: {"lines": ["Line one","Line two"], "suffix": "Award"}` controls the big intro title;
 otherwise the name is auto-fitted. No component changes are required.
 
+### Category intro voice-over (`introVoiceOverSeconds`)
+
+Set `"introVoiceOverSeconds": 12` on a category when the introduction is spoken (e.g. *"…The Nominees
+for the 'Youth Creative Business Concept Award' are:"* reads in ≈ 12 s). The intro then **stretches
+automatically**: the revealed title holds until the VO has finished and the standard 0.8 s exit plays
+afterwards, so the spoken copy always fits and the last intro frame is still the first frame of
+Nominee 01. `null`/absent/`0` keeps the default 5.0 s intro. The fastest way to set it: **Category tab
+→ "Voice Over — intro length (seconds)"** in the editor — it even has a *Measure from audio file…*
+button that fills the field from your VO file's actual length.
+
+**Existing soundtracks** (made before the stretch) fall behind the video: their nominee cues and
+roster chimes arrive too early and the track ends early. Fix without re-cutting anything:
+
+```bash
+npm run stretch:audio -- <categoryId>     # splices the missing seconds into the master
+node scripts/mux-audio.mjs <categoryId>   # then re-mix the clips from the extended track
+```
+
+The splice happens at **exactly the same point the video was stretched** (the frame the title
+starts leaving), so everything before it is untouched and every cue after it realigns. The gap is
+filled with the track's **own ambience** — a punctuation-free window (the hum/pad, no bells/sweeps
+sub hits) is detected and crossfade-looped to fill it, so the bed keeps breathing under the spoken
+intro (`--fill=silence` splices a clean silent pocket instead; `--window=start:end` picks the
+ambience window by hand). If the voice-over grows again later, just re-run the command — only the
+shortfall is inserted. The original is copied to `out/audio/backup/` first. In the editor the same
+operation is one click: **Audio tab → "Extend for voice-over"** (the tab also warns you when the
+track length no longer matches the video).
+For a placeholder with a *continuous* music bed through the hold, just regenerate it instead —
+`make-placeholder-audio.py` bakes the stretch in.
+
 ## 3. Rendering
 
 ### The web editor (recommended for non-technical operators)
@@ -78,13 +108,18 @@ A local, zero-dependency web UI that covers the whole process end to end:
 - **Nominees tab** — view every nominee as a card with their photo, add/edit/reorder/delete them
   (name, business, title, country, achievement, portrait + crop focus, company logo), pick media
   from the library or upload new files inline, and render a **preview still** of any nominee or intro.
-- **Category tab** — event details plus the category name/number/id and the intro title lines.
+- **Category tab** — event details plus the category name/number/id, the intro title lines, and the
+  **Voice Over** length (seconds): the intro holds on the title so a spoken introduction fits, then
+  plays its standard exit — see "Category intro voice-over" above. A *Measure from audio file…*
+  button fills the value from your VO recording's duration.
 - **Media tab** — drag-and-drop upload of portraits and company logos into `public/`, with usage
   info and safe deletion (files still referenced by a nominee are protected; template artwork in
   `public/logos/` is view-only).
 - **Audio tab** — upload the polished per-category soundtrack (music **+ voice-over**, stereo
   48 kHz, whole sequence — WAV/MP3/M4A/AAC/FLAC/OGG), preview it, remove it, or generate the
-  placeholder.
+  placeholder. The track's length is checked against the video (including any voice-over stretch),
+  and **Extend for voice-over** splices missing time in at the same point the video was stretched
+  — see "Category intro voice-over" above.
 - **Pipeline tab** — run the three steps (render silent clips → soundtrack → mix) with **live
   logs**, stop/queue control, and browse/open/download the finished MP4s.
 
@@ -127,6 +162,10 @@ node scripts/mux-audio.mjs youth-creative-business-concept  # → out/<category>
 
 # Legacy: a bare nominee count still works → out/audio/placeholder-soundtrack.wav
 python3 scripts/make-placeholder-audio.py 5
+
+# Existing master behind a stretched (voice-over) intro? Splice the missing seconds in place,
+# then re-mix (see "Category intro voice-over" in section 2):
+npm run stretch:audio -- youth-creative-business-concept
 ```
 
 `make-placeholder-audio.py` reads `src/data/timing.json`, so regenerating after any timing change keeps the audio in sync. To use real audio: export a stereo 48 kHz WAV of the **whole category sequence** (same length) and pass it as the 2nd argument to `mux-audio.mjs`. Every clip is cut from that track at its sequence position, so all files stay in sync.
@@ -138,6 +177,7 @@ Cue frames (for composers): see `INTRO` and `NOM` in `src/utils/timing.ts` — e
   If you change `fps`, also scale the frame counts in `src/utils/timing.ts` (they are authored at 30 fps).
 - **Codec / quality**: `remotion.config.ts` (`setCodec`, `setCrf` — lower CRF = higher quality) and `scripts/render-category.mjs`.
 - **Duration per nominee**: `nomineeFrames` in `timing.json` **and** the `NOM` stage table in `src/utils/timing.ts` (the JSON sets the scene length; the table must fit inside it — `exitStart + 42 ≤ nomineeFrames`). The hold is the middle section. After changing either, regenerate the soundtrack (`make-placeholder-audio.py` mirrors both).
+- **Duration per intro (voice-over)**: set `introVoiceOverSeconds` on the category (or the Voice Over field in the editor). The hold is inserted at `introExitStart` in `timing.json` (the frame the exit begins — the title must be fully revealed by then); the audio placeholder generator and `mux-audio.mjs` read the same field, so all cut points stay in sync.
 
 # Render Summary
 

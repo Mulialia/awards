@@ -11,6 +11,7 @@
     "editor": "node scripts/editor-server.mjs",
     "categories": "node scripts/list-categories.mjs",
     "steps": "node scripts/category-steps.mjs",
+    "stretch:audio": "node scripts/stretch-audio.mjs",
     "still:direction": "remotion still src/index.ts NomineeReveal out/stills/nominee-reveal.png --frame=110 --props='{\"categoryId\":\"youth-creative-business-concept\",\"nomineeId\":\"youth-001\"}'",
     "render:intro": "remotion render src/index.ts CategoryIntro out/youth-creative-business-concept/00-category-intro.mp4 --props='{\"categoryId\":\"youth-creative-business-concept\"}'",
     "render:nominee": "remotion render src/index.ts NomineeReveal out/nominee.mp4",

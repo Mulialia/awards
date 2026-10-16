@@ -11,7 +11,10 @@ const awards = JSON.parse(fs.readFileSync('src/data/awards.json', 'utf8'));
 const timing = JSON.parse(fs.readFileSync('src/data/timing.json', 'utf8'));
 
 const rows = awards.categories.map((c) => {
-  const frames = timing.introFrames + c.nominees.length * timing.nomineeFrames + timing.rosterFrames;
+  // Intro length incl. the optional voice-over hold (mirrors introHoldFrames in src/utils/timing.ts)
+  const voSec = Number(c.introVoiceOverSeconds) || 0;
+  const intro = timing.introFrames + (voSec > 0 ? Math.max(0, Math.ceil(voSec * timing.fps) - (timing.introExitStart ?? 126)) : 0);
+  const frames = intro + c.nominees.length * timing.nomineeFrames + timing.rosterFrames;
   return {
     number: c.number,
     id: c.id,

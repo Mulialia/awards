@@ -65,7 +65,8 @@
           "companyLogo": "logos/company/smokelessbriggs.jpg",
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 14
     },
     {
       "id": "climate-resilient-business-strategy",
@@ -153,7 +154,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 15
     },
     {
       "id": "promising-women-entrepreneurs",

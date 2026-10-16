@@ -14,26 +14,35 @@ First argument is either a CATEGORY ID (default: every category in awards.json g
 master at out/audio/<categoryId>-soundtrack.wav, sized to that category's nominee count) or a
 plain nominee count for the legacy single-file output.
 """
-import json, sys, wave
+import json, math, sys, wave
 import numpy as np
 from scipy.signal import butter, sosfilt, fftconvolve
 
 SR = 48000
 T = json.load(open('src/data/timing.json', encoding='utf-8'))
 FPS, INTRO, NOMF, ROST = T['fps'], T['introFrames'], T['nomineeFrames'], T['rosterFrames']
+EXIT0 = T.get('introExitStart', 126)   # cue frame in src/utils/timing.ts (INTRO.exit)
 
 AWARDS = json.load(open('src/data/awards.json', encoding='utf-8'))
 CATS = {c['id']: c for c in AWARDS['categories']}
+
+def intro_frames(cat):
+    """Intro length incl. the optional voice-over hold (mirrors introHoldFrames in src/utils/timing.ts)."""
+    vo = float((cat or {}).get('introVoiceOverSeconds') or 0)
+    return INTRO + (max(0, math.ceil(vo * FPS) - EXIT0) if vo > 0 else 0)
+
 arg = sys.argv[1] if len(sys.argv) > 1 else AWARDS['categories'][0]['id']
 if arg in CATS:                      # per-category master (recommended)
     N = len(CATS[arg]['nominees'])
+    IF = intro_frames(CATS[arg])
     OUT = sys.argv[2] if len(sys.argv) > 2 else f'out/audio/{arg}-soundtrack.wav'
 else:                                # legacy: bare nominee count
     N = int(arg)
+    IF = INTRO
     OUT = sys.argv[2] if len(sys.argv) > 2 else 'out/audio/placeholder-soundtrack.wav'
 rng = np.random.default_rng(7)
 
-total = (INTRO + N * NOMF + ROST) / FPS
+total = (IF + N * NOMF + ROST) / FPS
 L = np.zeros(int(total * SR) + SR * 2)
 R = np.zeros_like(L)
 t_of = lambda f: f / FPS
@@ -101,12 +110,12 @@ for i, (nt, fr) in enumerate([('A3', 80), ('C4', 90), ('E4', 100)]):  # title re
     put(pluck(A[nt], 2.4), t_of(fr), pan=-0.3 + 0.3 * i, gain=0.22)
 put(bell(A['A4'], 4.0), t_of(112), gain=0.14)                         # "AWARD"
 put(sub_hit(41, 2.6), t_of(112), gain=0.4)
-put(noise_sweep(0.9, 6000, 900, False), t_of(126), gain=0.12)         # hairline returns
+put(noise_sweep(0.9, 6000, 900, False), t_of(EXIT0 + IF - INTRO), gain=0.12)  # hairline returns (after any VO hold)
 
 # ── nominees (cue frames mirror NOM in src/utils/timing.ts — 150-frame scene) ─────────────────
 phrase = ['A4', 'C5', 'G4', 'E5', 'D4']  # varied sparkle per nominee (cycled)
 for i in range(N):
-    base = INTRO + i * NOMF
+    base = IF + i * NOMF
     S = lambda f: t_of(base + f)
     put(noise_sweep(0.7, 700, 4200, True), S(2), gain=0.09)             # hairline collapse / frame draws
     put(noise_sweep(1.5, 300, 3000, True), S(12), gain=0.13)            # portrait reveal (portraitWipe 10–40)
@@ -120,7 +129,7 @@ for i in range(N):
     put(noise_sweep(0.95, 700, 5500, True), S(130), gain=0.08)          # hairline redraws (hairlineOut 128)
 
 # ── closing roster ────────────────────────────────────────────────────────────────────────────
-rb = INTRO + N * NOMF
+rb = IF + N * NOMF
 RS = lambda f: t_of(rb + f)
 put(noise_sweep(0.7, 700, 4200, True), RS(2), gain=0.09)
 put(sub_hit(46, 2.0), RS(8), gain=0.35)

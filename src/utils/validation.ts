@@ -32,6 +32,14 @@ export function validateAwards(data: AwardsData): Issue[] {
     if (!c.name?.trim()) out.push({level: 'error', where: cw, message: 'missing "name"'});
     if (!c.nominees?.length) out.push({level: 'error', where: cw, message: 'has no nominees'});
     if (c.nominees.length > 14) out.push({level: 'warning', where: cw, message: `${c.nominees.length} nominees (> 14 planned maximum)`});
+    const vo: unknown = c.introVoiceOverSeconds;
+    if (vo != null) {
+      if (typeof vo !== 'number' || !Number.isFinite(vo) || vo < 0) {
+        out.push({level: 'error', where: cw, message: '"introVoiceOverSeconds" must be a number of seconds ≥ 0 (or null)'});
+      } else if (vo > 30) {
+        out.push({level: 'warning', where: cw, message: `intro voice-over of ${vo} s makes the introduction very long — double-check the value`});
+      }
+    }
     for (const n of c.nominees) {
       if (nomIds.has(n.id)) out.push({level: 'error', where: `${cw} / ${n.id}`, message: 'duplicate nominee id'});
       nomIds.add(n.id);

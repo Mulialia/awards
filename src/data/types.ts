@@ -27,6 +27,12 @@ export type Category = {
   name: string;
   /** Optional manual control of the big intro title. Falls back to auto-wrapping `name`. */
   introTitle?: {lines: string[]; suffix?: string | null} | null;
+  /**
+   * Optional voice-over length for the category introduction, in seconds (e.g. 12 = a ~12 s VO).
+   * The intro holds on the revealed title until the VO has finished, then plays the standard exit,
+   * so the spoken copy always fits. null/absent/0 → the default 5.0 s intro (no hold).
+   */
+  introVoiceOverSeconds?: number | null;
   nominees: Nominee[];
 };
 

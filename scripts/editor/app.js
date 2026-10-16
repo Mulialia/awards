@@ -22,6 +22,31 @@ const cat = () => S.awards?.categories.find((c) => c.id === S.catId) ?? null;
 const errors = () => S.issues.filter((i) => i.level === 'error');
 const mediaUrl = (rel) => `/media/${rel}${S.cacheBust[rel] ? `?v=${S.cacheBust[rel]}` : ''}`;
 
+// Intro length per category — mirrors introHoldFrames/introFrames in src/utils/timing.ts.
+// A voice-over longer than the intro-exit frame (title fully revealed) stretches the intro by a hold.
+const introHold = (c) => {
+  const vo = Number(c?.introVoiceOverSeconds) || 0;
+  return vo > 0 ? Math.max(0, Math.ceil(vo * S.timing.fps) - (S.timing.introExitStart ?? 126)) : 0;
+};
+const introFramesOf = (c) => S.timing.introFrames + introHold(c);
+const totalFramesOf = (c) => introFramesOf(c) + c.nominees.length * S.timing.nomineeFrames + S.timing.rosterFrames;
+function voSummary(c) {
+  const vo = Number(c?.introVoiceOverSeconds) || 0;
+  if (!(vo > 0)) return 'No voice-over — the intro keeps its default 5.0 s.';
+  const len = introFramesOf(c);
+  return `VO ${vo.toFixed(1)} s → the title holds and the intro stretches to ${len} frames = ${(len / S.timing.fps).toFixed(1)} s (the standard 0.8 s exit plays after the VO ends).`;
+}
+function updateVoReadout(c) {
+  const hint = $('#voHint');
+  if (hint) hint.textContent = voSummary(c);
+  const sum = $('#summaryLine');
+  if (sum) {
+    const introLen = introFramesOf(c);
+    const frames = totalFramesOf(c);
+    sum.innerHTML = `${c.nominees.length} nominees · intro ${introLen} f (${(introLen / S.timing.fps).toFixed(1)} s) + ${c.nominees.length}×${S.timing.nomineeFrames} f + roster ${S.timing.rosterFrames} f = ${frames} frames @ ${S.timing.fps} fps = ${Math.round(frames / S.timing.fps)} s · output → <code>out/${esc(c.id)}/</code>`;
+  }
+}
+
 async function api(path, opts = {}) {
   const res = await fetch(path, opts);
   let body = null;
@@ -427,7 +452,8 @@ function renderCategoryTab() {
   const ev = S.awards.event ?? (S.awards.event = {name: '', brand: '', year: null});
   const lines = c.introTitle?.lines?.join('\n') ?? '';
   const suffix = c.introTitle?.suffix ?? '';
-  const frames = S.timing.introFrames + c.nominees.length * S.timing.nomineeFrames + S.timing.rosterFrames;
+  const introLen = introFramesOf(c);
+  const frames = totalFramesOf(c);
 
   el.innerHTML = `
     <h2>Category settings</h2>
@@ -453,6 +479,14 @@ function renderCategoryTab() {
           <label>Intro title — suffix</label><input type="text" data-bind="cat-suffix" value="${esc(suffix)}" placeholder="Award">
           <div class="hint">Leave the lines + suffix empty to auto-fit the category name instead.</div>
         </div>
+        <div class="field">
+          <label>Voice Over — intro length (seconds)</label>
+          <input type="number" inputmode="decimal" step="0.1" min="0" data-bind="cat-vo" value="${c.introVoiceOverSeconds ?? ''}" placeholder="none — 5.0 s intro">
+          <div class="hint" id="voHint">${esc(voSummary(c))}</div>
+          <label class="btn small" style="margin-top:6px;display:inline-block">Measure from audio file…
+            <input type="file" id="voFile" accept=".wav,.mp3,.m4a,.aac,.flac,.ogg" hidden>
+          </label>
+        </div>
       </div>
       <div class="field">
         <label>Intro title — lines <span class="counter">one per line, optional</span></label>
@@ -466,7 +500,7 @@ function renderCategoryTab() {
     </div>
     <div class="card">
       <h3>Summary</h3>
-      <p class="sub" style="margin:0">${c.nominees.length} nominees · ${frames} frames @ ${S.timing.fps} fps = ${Math.round(frames / S.timing.fps)} s · output → <code>out/${esc(c.id)}/</code></p>
+      <p class="sub" style="margin:0" id="summaryLine">${c.nominees.length} nominees · intro ${introLen} f (${(introLen / S.timing.fps).toFixed(1)} s) + ${c.nominees.length}×${S.timing.nomineeFrames} f + roster ${S.timing.rosterFrames} f = ${frames} frames @ ${S.timing.fps} fps = ${Math.round(frames / S.timing.fps)} s · output → <code>out/${esc(c.id)}/</code></p>
     </div>`;
 
   el.oninput = (e) => {
@@ -490,9 +524,39 @@ function renderCategoryTab() {
       const ls = el.querySelector('[data-bind="cat-lines"]').value.split('\n').map((s) => s.trim()).filter(Boolean);
       const sf = el.querySelector('[data-bind="cat-suffix"]').value.trim();
       c.introTitle = ls.length || sf ? {lines: ls, suffix: sf || null} : null;
+    } else if (bind === 'cat-vo') {
+      const raw = e.target.value.trim();
+      c.introVoiceOverSeconds = raw === '' ? null : Math.max(0, Number(raw) || 0);
+      if (c.introVoiceOverSeconds === null) e.target.value = '';
+      updateVoReadout(c);
     }
     updateSaveUI();
     scheduleValidate();
+  };
+  const voFile = $('#voFile');
+  if (voFile) voFile.onchange = () => {
+    const file = voFile.files[0];
+    voFile.value = '';
+    if (!file) return;
+    // Option 2 convenience: measure the VO snippet's length and feed the same field.
+    const url = URL.createObjectURL(file);
+    const audio = new Audio();
+    let measured = false;
+    const done = (secs) => {
+      if (measured) return;
+      measured = true;
+      URL.revokeObjectURL(url);
+      if (!isFinite(secs) || secs <= 0) return toast('Could not read the duration of that file', true);
+      const input = el.querySelector('[data-bind="cat-vo"]');
+      input.value = secs.toFixed(1);
+      input.dispatchEvent(new Event('input', {bubbles: true}));
+      toast(`Measured ${secs.toFixed(1)} s — the intro now stretches to fit (remember to Save)`);
+    };
+    audio.preload = 'metadata';
+    audio.onloadedmetadata = () => done(audio.duration);
+    audio.oncanplay = () => done(audio.duration);
+    audio.onerror = () => { URL.revokeObjectURL(url); toast('This browser could not read that audio format — type the duration manually', true); };
+    audio.src = url;
   };
   el.onclick = (e) => {
     if (e.target.id === 'btnPreviewIntro2') startJob('still');
@@ -512,7 +576,7 @@ function addCategory() {
   let id = 'new-category';
   let i = 2;
   while (S.awards.categories.some((c) => c.id === id)) id = `new-category-${i++}`;
-  S.awards.categories.push({id, number, name: '', introTitle: null, nominees: []});
+  S.awards.categories.push({id, number, name: '', introTitle: null, introVoiceOverSeconds: null, nominees: []});
   S.catId = id;
   renderAll();
   switchTab('category');
@@ -638,8 +702,11 @@ function renderAudioTab() {
   const el = $('#tab-audio');
   if (!c) { el.innerHTML = '<p class="sub">No category selected.</p>'; return; }
   const info = S.audio[c.id] ?? {file: null};
-  const totalFrames = S.timing.introFrames + c.nominees.length * S.timing.nomineeFrames + S.timing.rosterFrames;
+  const totalFrames = totalFramesOf(c);
   const seconds = Math.round(totalFrames / S.timing.fps);
+  const hold = introHold(c);
+  const holdSec = (hold / S.timing.fps).toFixed(1);
+  const outOfSync = !!(info.file && info.duration != null && Math.abs(info.duration - totalFrames / S.timing.fps) > 0.1);
   const srcLabel = {uploaded: 'Uploaded track', placeholder: 'Placeholder (generated)', manual: 'Manual WAV'}[info.source] ?? '';
   const accept = '.wav,.mp3,.m4a,.aac,.flac,.ogg';
 
@@ -655,16 +722,23 @@ function renderAudioTab() {
             <span class="src-badge ${info.source}">${srcLabel}</span>
           </div>
           <div class="sub" style="margin:4px 0 0">
-            ${fmtSize(info.size)} ·
+            ${fmtSize(info.size)}${info.duration != null ? ` · ${info.duration.toFixed(1)} s` : ''} ·
             ${info.source === 'uploaded' && info.uploaded
               ? `uploaded ${fmtDate(Date.parse(info.uploaded.uploadedAt))} as “${esc(info.uploaded.originalName)}”`
               : `file date ${fmtDate(info.mtime)}`}
           </div>
+          ${outOfSync ? `
+          <div class="sub" style="margin:8px 0 0;color:#d9a441">
+            ⚠ <strong>Out of sync:</strong> the video is now ${seconds} s${hold > 0 ? ` (the intro grew by ${holdSec} s for the voice-over)` : ''}, but this track is ${info.duration.toFixed(1)} s —
+            its cues arrive too early and it ends early. Use <em>Extend for voice-over</em> to splice the missing time in at the same point the video was stretched
+            (the track's own ambience fills the gap; a backup of the current track is kept), or replace/regenerate the track.
+          </div>` : ''}
           <audio controls preload="none" src="/api/audio/${encodeURIComponent(c.id)}/file?v=${info.mtime}"></audio>
         </div>
         <div class="row" style="align-items:flex-start">
           <label class="btn">Replace…<input type="file" id="audioFile" accept="${accept}" hidden></label>
           <button class="btn" id="btnGenAudio">Generate placeholder</button>
+          ${hold > 0 ? `<button class="btn" id="btnStretchAudio" title="Insert ${holdSec} s of the track's own ambience (hum/pad, no accent cues) where the video intro was stretched, so every nominee cue and the roster chimes realign">Extend for voice-over (${holdSec} s)</button>` : ''}
           <button class="btn danger" id="btnRemoveAudio">Remove</button>
         </div>`
       : `
@@ -706,6 +780,15 @@ function renderAudioTab() {
     if (info.file && !confirm(`Replace the current track (${info.name}) with the generated placeholder?`)) return;
     startJob('audio');
   });
+  $('#btnStretchAudio')?.addEventListener('click', () => {
+    const atSec = ((S.timing.introExitStart ?? 126) / S.timing.fps).toFixed(1);
+    confirm(
+      `Insert ${holdSec} s of ambience into "${info.name}" at ${atSec} s — exactly where the video intro was stretched for the voice-over?\n\n` +
+      'The track\u2019s own bed (hum/pad) continues through the hold — no bells, sweeps or sub hits are carried over \u2014 while every cue after that point ' +
+      '(nominee appearances, roster chimes) shifts later by the same amount, so audio and video realign. ' +
+      'A backup of the current track is kept in out/audio/backup/. Run the Mix step afterwards to apply it.',
+    ) && startJob('stretch');
+  });
   $('#btnRemoveAudio')?.addEventListener('click', async () => {
     if (!confirm(`Remove ${info.name} from this category?`)) return;
     try {
@@ -720,7 +803,7 @@ function renderAudioTab() {
 }
 
 // ── tab: pipeline ────────────────────────────────────────
-const actionLabel = (a) => ({render: 'Render', audio: 'Soundtrack', mux: 'Mix', pipeline: 'Full pipeline', still: 'Preview still'})[a] ?? a;
+const actionLabel = (a) => ({render: 'Render', audio: 'Soundtrack', mux: 'Mix', pipeline: 'Full pipeline', still: 'Preview still', stretch: 'Extend audio'})[a] ?? a;
 
 function stepCard(n, title, statusHtml, runAction, disabled) {
   return `

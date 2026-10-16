@@ -7,7 +7,7 @@ import {CategorySequence} from './compositions/CategorySequence';
 import {assertValid, awards, getCategory} from './data';
 import type {CategoryProps, NomineeProps} from './data/types';
 import {QA_CATEGORY_14, QA_FULL_FIELDS, QA_LONG} from './data/qa-fixtures';
-import {FPS, HEIGHT, INTRO_FRAMES, NOMINEE_FRAMES, ROSTER_FRAMES, WIDTH, categoryFrames} from './utils/timing';
+import {FPS, HEIGHT, NOMINEE_FRAMES, ROSTER_FRAMES, WIDTH, categoryFrames, introFrames} from './utils/timing';
 import {loadBrandFonts} from './utils/fonts';
 
 loadBrandFonts();
@@ -27,14 +27,26 @@ export const RemotionRoot: React.FC = () => {
         width={WIDTH}
         height={HEIGHT}
         fps={FPS}
-        durationInFrames={categoryFrames(first.nominees.length)}
+        durationInFrames={categoryFrames(first)}
         defaultProps={catDefault}
         calculateMetadata={({props}) => {
           assertValid();
-          return {durationInFrames: categoryFrames(getCategory(props.categoryId).nominees.length)};
+          return {durationInFrames: categoryFrames(getCategory(props.categoryId))};
         }}
       />
-      <Composition id="CategoryIntro" component={CategoryIntro} width={WIDTH} height={HEIGHT} fps={FPS} durationInFrames={INTRO_FRAMES} defaultProps={catDefault} calculateMetadata={() => {assertValid(); return {};}} />
+      <Composition
+        id="CategoryIntro"
+        component={CategoryIntro}
+        width={WIDTH}
+        height={HEIGHT}
+        fps={FPS}
+        durationInFrames={introFrames(first)}
+        defaultProps={catDefault}
+        calculateMetadata={({props}) => {
+          assertValid();
+          return {durationInFrames: introFrames(getCategory(props.categoryId))};
+        }}
+      />
       <Composition id="CategoryRoster" component={CategoryRoster} width={WIDTH} height={HEIGHT} fps={FPS} durationInFrames={ROSTER_FRAMES} defaultProps={catDefault} calculateMetadata={() => {assertValid(); return {};}} />
       <Composition id="NomineeReveal" component={NomineeReveal} width={WIDTH} height={HEIGHT} fps={FPS} durationInFrames={NOMINEE_FRAMES} defaultProps={nomDefault} calculateMetadata={() => {assertValid(); return {};}} />
 

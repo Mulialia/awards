@@ -1,7 +1,7 @@
 import React from 'react';
 import {theme} from '../styles/theme';
 import type {Category} from '../data/types';
-import {INTRO} from '../utils/timing';
+import {introCues} from '../utils/timing';
 import {easeOut, lerp, prog} from '../utils/motion';
 import {fitLines} from '../utils/textLayout';
 import {AfricanSignature} from './AfricanSignature';
@@ -36,10 +36,11 @@ export const layoutIntroTitle = (category: Category) => {
 /** The category introduction typography: eyebrow → masked line reveals → suffix. */
 export const CategoryTitle: React.FC<{category: Category; frame: number}> = ({category, frame}) => {
   const L = layoutIntroTitle(category);
+  const I = introCues(category); // exit shifted past the voice-over hold
   const c = theme.colors;
-  const eyebrow = prog(frame, INTRO.eyebrow[0], INTRO.eyebrow[1], easeOut);
-  const suffix = prog(frame, INTRO.suffix[0], INTRO.suffix[1], easeOut);
-  const exit = prog(frame, INTRO.exit[0], INTRO.exit[1] - 4, easeOut);
+  const eyebrow = prog(frame, I.eyebrow[0], I.eyebrow[1], easeOut);
+  const suffix = prog(frame, I.suffix[0], I.suffix[1], easeOut);
+  const exit = prog(frame, I.exit[0], I.exit[1] - 4, easeOut);
 
   return (
     <div style={{position: 'absolute', left: TITLE_LEFT, top: L.top, opacity: 1 - exit, transform: `translateY(${-22 * exit}px)`}}>
@@ -51,7 +52,7 @@ export const CategoryTitle: React.FC<{category: Category; frame: number}> = ({ca
 
       <div style={{marginTop: GAP1, fontFamily: theme.fonts.display, fontWeight: 620, fontSize: L.size, lineHeight: 1.04, color: c.ivory, letterSpacing: '-0.008em'}}>
         {L.lines.map((line, i) => {
-          const p = prog(frame, INTRO.titleStart + i * INTRO.titleStagger, INTRO.titleStart + i * INTRO.titleStagger + INTRO.titleDur, easeOut);
+          const p = prog(frame, I.titleStart + i * I.titleStagger, I.titleStart + i * I.titleStagger + I.titleDur, easeOut);
           return (
             <div key={i} style={{overflow: 'hidden', padding: '0.07em 0 0.17em', margin: '-0.07em 0 -0.17em'}}>
               <div style={{transform: `translateY(${lerp(108, 0, p)}%)`, opacity: Math.min(1, p * 2), filter: `blur(${((1 - p) * 10).toFixed(2)}px)`, whiteSpace: 'nowrap'}}>{line}</div>

@@ -105,7 +105,7 @@ export const CategoryRoster: React.FC<CategoryProps> = ({categoryId}) => {
   const chrome = prog(frame, 0, 16, easeOut); // fades in and stays through the final frame
   return (
     <AbsoluteFill>
-      <BackgroundAtmosphere frame={rosterStart(category.nominees.length) + frame} />
+      <BackgroundAtmosphere frame={rosterStart(category) + frame} />
       <Chrome categoryName={category.name} opacity={chrome} />
       <RosterScene category={category} />
     </AbsoluteFill>

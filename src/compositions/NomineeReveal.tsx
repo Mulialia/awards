@@ -42,7 +42,7 @@ export const NomineeReveal: React.FC<NomineeProps> = ({categoryId, nomineeId, ov
   const chrome = prog(frame, 0, 16, easeOut) * (1 - prog(frame, NOMINEE_FRAMES - 16, NOMINEE_FRAMES, easeOut));
   return (
     <AbsoluteFill>
-      <BackgroundAtmosphere frame={nomineeStart(index) + frame} />
+      <BackgroundAtmosphere frame={nomineeStart(category, index) + frame} />
       <Chrome categoryName={category.name} opacity={chrome} />
       <NomineeScene nominee={merged} index={index} total={category.nominees.length} />
     </AbsoluteFill>

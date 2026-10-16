@@ -14,6 +14,10 @@
 | 3.7–4.4 s | 112–132 | "AWARD" + red·gold·green signature tick slide in. |
 | 4.2–5.0 s | 126–150 | Title lifts and fades; the hairline returns to full width at mid-screen; category label + emblem fade in. **Last frame = first frame of Nominee 01.** |
 
+Optional voice-over hold: when the category sets `introVoiceOverSeconds` (Category tab → "Voice Over"
+in the editor), the fully-revealed title holds from frame 126 until the VO has finished, then the
+standard 24-frame exit plays — intro length = 150 f + max(0, ceil(voSeconds × fps) − 126).
+
 ## Nominee presentation — 5.0 s (150 f), identical timing for every nominee
 | Time | Frames | Stage | Movement |
 |---|---|---|---|

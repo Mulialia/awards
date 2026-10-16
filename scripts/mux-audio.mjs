@@ -23,6 +23,13 @@ console.log('soundtrack:', wav);
 const timing = JSON.parse(fs.readFileSync('src/data/timing.json', 'utf8'));
 const awards = JSON.parse(fs.readFileSync('src/data/awards.json', 'utf8'));
 const category = awards.categories.find((c) => c.id === categoryId);
+
+// Intro length per category — mirrors introHoldFrames in src/utils/timing.ts: a voice-over longer
+// than the intro-exit frame stretches the intro by a hold, so every cut point below shifts.
+const voSec = Number(category.introVoiceOverSeconds) || 0;
+const introFrames = timing.introFrames + (voSec > 0 ? Math.max(0, Math.ceil(voSec * timing.fps) - (timing.introExitStart ?? 126)) : 0);
+if (introFrames !== timing.introFrames) console.log(`intro: ${introFrames} frames (${voSec} s voice-over hold)`);
+
 const dir = path.join('out', categoryId);
 const outDir = path.join(dir, 'with-audio');
 fs.mkdirSync(outDir, {recursive: true});
@@ -33,14 +40,14 @@ execFileSync('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error', '-i', wav, '
 
 const sec = (frames) => (frames / timing.fps).toFixed(6);
 const clips = [
-  {file: '00-category-intro.mp4', start: 0, frames: timing.introFrames},
+  {file: '00-category-intro.mp4', start: 0, frames: introFrames},
   ...category.nominees.map((n, i) => ({
     file: `${String(i + 1).padStart(2, '0')}-${n.id}.mp4`,
-    start: timing.introFrames + i * timing.nomineeFrames,
+    start: introFrames + i * timing.nomineeFrames,
     frames: timing.nomineeFrames,
   })),
-  {file: '99-category-roster.mp4', start: timing.introFrames + category.nominees.length * timing.nomineeFrames, frames: timing.rosterFrames},
-  {file: 'category-sequence-silent.mp4', start: 0, frames: timing.introFrames + category.nominees.length * timing.nomineeFrames + timing.rosterFrames, outName: 'category-sequence.mp4'},
+  {file: '99-category-roster.mp4', start: introFrames + category.nominees.length * timing.nomineeFrames, frames: timing.rosterFrames},
+  {file: 'category-sequence-silent.mp4', start: 0, frames: introFrames + category.nominees.length * timing.nomineeFrames + timing.rosterFrames, outName: 'category-sequence.mp4'},
 ];
 
 for (const c of clips) {

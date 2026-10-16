@@ -1,4 +1,5 @@
 import timing from "../data/timing.json";
+import type {Category} from "../data/types";
 
 /**
  * Single source of truth for all timing. Every number is a FRAME at `FPS`.
@@ -7,21 +8,21 @@ import timing from "../data/timing.json";
 export const FPS = timing.fps;
 export const WIDTH = timing.width;
 export const HEIGHT = timing.height;
-export const INTRO_FRAMES = timing.introFrames; // 5.0 s
+export const INTRO_FRAMES = timing.introFrames; // 5.0 s, before any voice-over hold
 export const NOMINEE_FRAMES = timing.nomineeFrames; // 5.0 s (incl. open + close transition)
 
 export const ROSTER_FRAMES = timing.rosterFrames; // 8.0 s — closing list of all nominees
 
-export const categoryFrames = (nomineeCount: number) =>
-  INTRO_FRAMES + nomineeCount * NOMINEE_FRAMES + ROSTER_FRAMES;
+export const categoryFrames = (category: Category) =>
+  introFrames(category) + category.nominees.length * NOMINEE_FRAMES + ROSTER_FRAMES;
 
 /** Absolute frame at which the closing roster begins. */
-export const rosterStart = (nomineeCount: number) =>
-  INTRO_FRAMES + nomineeCount * NOMINEE_FRAMES;
+export const rosterStart = (category: Category) =>
+  introFrames(category) + category.nominees.length * NOMINEE_FRAMES;
 
 /** Absolute frame at which nominee `index` begins inside a category sequence. */
-export const nomineeStart = (index: number) =>
-  INTRO_FRAMES + index * NOMINEE_FRAMES;
+export const nomineeStart = (category: Category, index: number) =>
+  introFrames(category) + index * NOMINEE_FRAMES;
 
 /** Category introduction — local frames (0 … INTRO_FRAMES). */
 export const INTRO = {
@@ -34,8 +35,30 @@ export const INTRO = {
   titleStagger: 10,
   titleDur: 34,
   suffix: [112, 132],
-  exit: [126, 150], // title fades, hairline returns to full width = first frame of nominee 1
+  exit: [timing.introExitStart, timing.introExitStart + 24], // title fades, hairline returns to full width = first frame of nominee 1
 } as const;
+
+/**
+ * Voice-over hold — extra frames inserted before the intro exit so a spoken introduction fits.
+ * The title is fully revealed by `INTRO.exit[0]`; a VO longer than that simply extends the hold,
+ * and the standard exit plays afterwards (so the VO always ends on a held title).
+ * A ~12 s VO → intro becomes ~12.8 s (12 s of title + the 0.8 s exit).
+ */
+export const introHoldFrames = (category: Pick<Category, 'introVoiceOverSeconds'>): number => {
+  const vo = category.introVoiceOverSeconds;
+  if (!vo || vo <= 0) return 0;
+  return Math.max(0, Math.ceil(vo * FPS) - INTRO.exit[0]);
+};
+
+/** Total intro length in frames for a category (base intro + voice-over hold). */
+export const introFrames = (category: Pick<Category, 'introVoiceOverSeconds'>): number =>
+  INTRO_FRAMES + introHoldFrames(category);
+
+/** Intro cue table with the exit shifted past the voice-over hold (use instead of raw INTRO). */
+export const introCues = (category: Pick<Category, 'introVoiceOverSeconds'>) => {
+  const h = introHoldFrames(category);
+  return {...INTRO, exit: [INTRO.exit[0] + h, INTRO.exit[1] + h] as const};
+};
 
 /**
  * Nominee presentation — local frames (0 … NOMINEE_FRAMES).

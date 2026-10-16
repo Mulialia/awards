@@ -24,7 +24,10 @@ if (!category) {
 
 const py = process.platform === 'win32' ? 'python' : 'python3';
 const n = category.nominees.length;
-const frames = timing.introFrames + n * timing.nomineeFrames + timing.rosterFrames;
+// Intro length incl. the optional voice-over hold (mirrors introHoldFrames in src/utils/timing.ts)
+const voSec = Number(category.introVoiceOverSeconds) || 0;
+const introF = timing.introFrames + (voSec > 0 ? Math.max(0, Math.ceil(voSec * timing.fps) - (timing.introExitStart ?? 126)) : 0);
+const frames = introF + n * timing.nomineeFrames + timing.rosterFrames;
 const seconds = frames / timing.fps;
 // Display paths with forward slashes (like the README) — existsSync accepts them on Windows too.
 const status = (p) => `   status:  ${fs.existsSync(p) ? '✓ exists — ' : '· missing — '}${p}`;
@@ -36,7 +39,7 @@ const wav = track ? track.replace(/\\/g, '/') : `out/audio/${categoryId}-soundtr
 const mixedSeq = `${outDir}/with-audio/category-sequence.mp4`;
 
 console.log(`${category.number}. ${category.name}  —  ${categoryId}`);
-console.log(`${n} nominees · intro ${timing.introFrames} f + ${n}×${timing.nomineeFrames} f + roster ${timing.rosterFrames} f @ ${timing.fps} fps = ${seconds} s\n`);
+console.log(`${n} nominees · intro ${introF} f${voSec ? ` (incl. ${voSec} s voice-over hold)` : ''} + ${n}×${timing.nomineeFrames} f + roster ${timing.rosterFrames} f @ ${timing.fps} fps = ${seconds} s\n`);
 
 console.log(`1. Silent clips  →  ${outDir}/`);
 console.log(`   node scripts/render-category.mjs ${categoryId}`);

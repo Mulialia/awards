@@ -7,7 +7,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
-import {spawn} from 'node:child_process';
+import {spawn, execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {validateAwards} from '../src/utils/validation.ts';
@@ -60,6 +60,9 @@ function normalize(data) {
   for (const c of data.categories) {
     if (!Array.isArray(c.nominees)) c.nominees = [];
     if (typeof c.number !== 'number') c.number = 0;
+    if (c.introVoiceOverSeconds != null && typeof c.introVoiceOverSeconds !== 'number') {
+      c.introVoiceOverSeconds = Number(c.introVoiceOverSeconds) || null;
+    }
   }
   return data;
 }
@@ -170,6 +173,22 @@ function listFiles(abs, extSet = null) {
 const mediaInfo = (dirKey, f) => ({name: f.name, rel: `${dirKey}/${f.name}`, url: `/media/${dirKey}/${f.name}`, size: f.size, mtime: f.mtime});
 const audioSourcePath = (id) => path.join(ROOT, AUDIO_DIR, `${id}.source.json`);
 
+/** Duration in seconds via ffprobe, cached per file+mtime so polling stays cheap. */
+const durationCache = new Map();
+function probeDuration(file) {
+  try {
+    const mtime = fs.statSync(file).mtimeMs;
+    const hit = durationCache.get(file);
+    if (hit && hit.mtime === mtime) return hit.dur;
+    const raw = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', file], {windowsHide: true}).toString().trim();
+    const dur = Number.isFinite(Number(raw)) ? Number(raw) : null;
+    durationCache.set(file, {mtime, dur});
+    return dur;
+  } catch {
+    return null;
+  }
+}
+
 function audioInfo(id) {
   const file = findSoundtrack(id, ROOT);
   if (!file) return {file: null};
@@ -182,6 +201,7 @@ function audioInfo(id) {
     name: path.basename(file),
     size: st.size,
     mtime: st.mtimeMs,
+    duration: probeDuration(file),
     source,
     uploaded,
   };
@@ -234,9 +254,11 @@ function stepsFor(action, p) {
     pre: () => clearSoundtrack(p.categoryId),
   };
   const mux = {label: 'Mix audio into clips', cmd: 'node', args: ['scripts/mux-audio.mjs', p.categoryId]};
+  const stretch = {label: 'Extend audio for the voice-over hold', cmd: 'node', args: ['scripts/stretch-audio.mjs', p.categoryId]};
   if (action === 'render') return [render];
   if (action === 'audio') return [audio];
   if (action === 'mux') return [mux];
+  if (action === 'stretch') return [stretch];
   if (action === 'pipeline') {
     return findSoundtrack(p.categoryId, ROOT)
       ? [render, {note: true, label: 'Soundtrack already present — keeping it'}, mux]
@@ -455,7 +477,7 @@ const server = http.createServer(async (req, res) => {
       const body = await jsonBody();
       const action = body.action;
       const categoryId = String(body.categoryId ?? '');
-      if (!['render', 'audio', 'mux', 'pipeline', 'still'].includes(action)) return sendJson(res, 400, {error: 'unknown action'});
+      if (!['render', 'audio', 'mux', 'pipeline', 'still', 'stretch'].includes(action)) return sendJson(res, 400, {error: 'unknown action'});
       if (!/^[\w.-]+$/.test(categoryId)) return sendJson(res, 400, {error: 'invalid category id'});
       if (body.nomineeId !== undefined && !/^[\w.-]*$/.test(String(body.nomineeId))) return sendJson(res, 400, {error: 'invalid nominee id'});
       const steps = stepsFor(action, {categoryId, nomineeId: body.nomineeId, frame: body.frame});

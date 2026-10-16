@@ -8,17 +8,18 @@ import {YoraLockup} from '../components/YoraLogo';
 import {getCategory} from '../data';
 import type {Category, CategoryProps} from '../data/types';
 import {easeInOut, easeOut, lerp, prog} from '../utils/motion';
-import {HEIGHT, INTRO, INTRO_FRAMES, WIDTH} from '../utils/timing';
+import {HEIGHT, INTRO, WIDTH, introCues, introFrames} from '../utils/timing';
 
 /** Foreground of the category introduction (transparent — sits on BackgroundAtmosphere). */
 export const IntroContent: React.FC<{category: Category}> = ({category}) => {
   const frame = useCurrentFrame();
   const L = layoutIntroTitle(category);
+  const I = introCues(category); // exit shifted past the voice-over hold
 
   // Hairline choreography: draws out → rises & shortens into the title rule → returns full width
   const draw = prog(frame, INTRO.lineDraw[0], INTRO.lineDraw[1], easeOut);
   const toRule = prog(frame, INTRO.lineToRule[0], INTRO.lineToRule[1], easeInOut);
-  const back = prog(frame, INTRO.exit[0], INTRO.exit[1], easeInOut);
+  const back = prog(frame, I.exit[0], I.exit[1], easeInOut);
 
   const mid = WIDTH / 2;
   let left = lerp(mid, 0, draw);
@@ -52,10 +53,11 @@ export const IntroContent: React.FC<{category: Category}> = ({category}) => {
 export const CategoryIntro: React.FC<CategoryProps> = ({categoryId}) => {
   const frame = useCurrentFrame();
   const category = getCategory(categoryId);
+  const total = introFrames(category); // 5.0 s, stretched when the category has a voice-over
   return (
     <AbsoluteFill>
       <BackgroundAtmosphere frame={frame} />
-      <Chrome categoryName={category.name} opacity={prog(frame, INTRO_FRAMES - 22, INTRO_FRAMES - 2, easeOut)} />
+      <Chrome categoryName={category.name} opacity={prog(frame, total - 22, total - 2, easeOut)} />
       <IntroContent category={category} />
     </AbsoluteFill>
   );

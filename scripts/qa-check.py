@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """Automated QA on a rendered category sequence (technical + data-accuracy + continuity).
 Usage: python3 scripts/qa-check.py <sequence.mp4> <categoryId>"""
-import json, subprocess, sys, os, tempfile
+import json, math, subprocess, sys, os, tempfile
 import numpy as np
 
 mp4, cat_id = sys.argv[1], sys.argv[2]
 T = json.load(open('src/data/timing.json'))
 data = json.load(open('src/data/awards.json'))
 cat = next(c for c in data['categories'] if c['id'] == cat_id)
-INTRO, NOMF, FPS, ROST = T['introFrames'], T['nomineeFrames'], T['fps'], T['rosterFrames']
+NOMF, FPS, ROST = T['nomineeFrames'], T['fps'], T['rosterFrames']
+# Intro length incl. the optional voice-over hold (mirrors introHoldFrames in src/utils/timing.ts)
+_exit0 = T.get('introExitStart', 126)
+_vo = float(cat.get('introVoiceOverSeconds') or 0)
+INTRO = T['introFrames'] + (max(0, math.ceil(_vo * FPS) - _exit0) if _vo > 0 else 0)
 expected = INTRO + len(cat['nominees']) * NOMF + ROST
 res = {}
 
