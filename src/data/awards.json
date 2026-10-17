@@ -83,7 +83,7 @@
           "business": "Burn Manufacturing",
           "title": null,
           "country": null,
-          "portrait": null,
+          "portrait": "portraits/climate-001.jpg",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -205,7 +205,7 @@
           "business": "Pula",
           "title": null,
           "country": null,
-          "portrait": "portraits/climate-003.jpg",
+          "portrait": "portraits/women-004.jpg",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -243,7 +243,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 14.6
     },
     {
       "id": "most-innovative-business-concept",
@@ -331,7 +332,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 15.7
     },
     {
       "id": "business-impact-in-africa",
@@ -419,7 +421,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 18
     },
     {
       "id": "social-entrepreneurship-excellence",
@@ -432,7 +435,7 @@
       "nominees": [
         {
           "id": "social-001",
-          "name": "Ann Cotton OBE",
+          "name": "Ann Cotton",
           "business": "CAMFED - Campaign for Female Education",
           "title": null,
           "country": null,
@@ -480,7 +483,7 @@
           "business": "Pula",
           "title": null,
           "country": null,
-          "portrait": "portraits/climate-003.jpg",
+          "portrait": "portraits/social-005.jpg",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -518,7 +521,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 17.4
     },
     {
       "id": "community-leadership",
@@ -606,7 +610,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 16.5
     },
     {
       "id": "technology-innovation",
@@ -641,11 +646,11 @@
         },
         {
           "id": "tech-003",
-          "name": "Dr. Raishree Naidoo",
+          "name": "Dr. Jaishree Naidoo",
           "business": "Envisionit Deep AI",
           "title": null,
           "country": null,
-          "portrait": "portraits/tech-003.jpg",
+          "portrait": "portraits/tech-003.png",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -683,7 +688,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 17.9
     },
     {
       "id": "sustainable-development-excellence",
@@ -722,7 +728,7 @@
           "business": "Pula",
           "title": null,
           "country": null,
-          "portrait": "portraits/climate-003.jpg",
+          "portrait": "portraits/sustainable-003.jpg",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -771,7 +777,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 19.2
     },
     {
       "id": "diaspora-media-excellence",
@@ -870,7 +877,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 15.3
     },
     {
       "id": "startup-of-the-year",
@@ -1024,7 +1032,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 16.2
     },
     {
       "id": "film-and-performing-arts-excellence",
@@ -1178,7 +1187,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 19.8
     },
     {
       "id": "entrepreneur-of-the-year",
@@ -1250,7 +1260,7 @@
           "business": "Pula",
           "title": null,
           "country": null,
-          "portrait": "portraits/climate-003.jpg",
+          "portrait": "portraits/entrepreneur-006.jpg",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -1283,7 +1293,7 @@
           "business": "nuvoteQ",
           "title": null,
           "country": null,
-          "portrait": "portraits/entrepreneur-009.jpg",
+          "portrait": "portraits/entrepreneur-009.webp",
           "portraitFocus": null,
           "companyLogo": null,
           "achievement": null
@@ -1301,7 +1311,7 @@
         },
         {
           "id": "entrepreneur-011",
-          "name": "Gohar Zaki",
+          "name": "Gohar Said",
           "business": "Suplyd",
           "title": null,
           "country": null,
@@ -1343,7 +1353,8 @@
           "companyLogo": null,
           "achievement": null
         }
-      ]
+      ],
+      "introVoiceOverSeconds": 14.6
     },
     {
       "id": "lifetime-achievement",

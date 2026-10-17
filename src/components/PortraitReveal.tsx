@@ -13,8 +13,8 @@ const initialsOf = (name: string) => {
 /**
  * Stage A. A geometric (chamfered) frame draws itself, then the portrait is revealed bottom-to-top
  * behind a gold leading edge, with a restrained push-in and one light sweep. Works for any portrait
- * aspect ratio (object-fit: cover + configurable focus) and for a missing portrait (clearly-marked
- * placeholder — never a fake photo).
+ * aspect ratio (object-fit: cover + configurable focus) and for a missing portrait — the nominee's
+ * initials over the panel (intentionally blank portraits are fine; never a fake photo).
  */
 export const PortraitReveal: React.FC<{nominee: Nominee; frame: number}> = ({nominee, frame}) => {
   const {x, y, w, h, chamfer} = theme.layout.portrait;
@@ -101,10 +101,6 @@ const Placeholder: React.FC<{name: string}> = ({name}) => (
     </svg>
     <div style={{position: 'absolute', left: 0, right: 0, top: '30%', textAlign: 'center', fontFamily: theme.fonts.display, fontStyle: 'italic', fontWeight: 300, fontSize: 260, lineHeight: 1, color: theme.colors.gold, opacity: 0.2}}>
       {initialsOf(name)}
-    </div>
-    <div style={{position: 'absolute', left: 0, right: 0, bottom: 44, textAlign: 'center', fontFamily: theme.fonts.sans}}>
-      <div style={{fontWeight: 800, fontSize: 21, letterSpacing: '0.3em', color: theme.colors.gold, opacity: 0.85}}>PORTRAIT PLACEHOLDER</div>
-      <div style={{fontWeight: 500, fontSize: 19, letterSpacing: '0.06em', color: theme.colors.ivoryFaint, marginTop: 10}}>Approved photograph to be supplied</div>
     </div>
   </div>
 );
