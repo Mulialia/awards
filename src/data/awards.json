@@ -4,6 +4,20 @@
     "brand": "YORA",
     "year": 2026
   },
+  "presentations": [
+    {
+      "id": "presentation",
+      "award": "Lifetime Achievement Award",
+      "name": "Dr. Modesta Vesonder",
+      "recipientType": "individual",
+      "business": "Katani Hospital",
+      "image": "recipients/presentation.jpg",
+      "imageFocus": null,
+      "logo": null,
+      "year": 2026,
+      "note": null
+    }
+  ],
   "categories": [
     {
       "id": "youth-creative-business-concept",

@@ -5,5 +5,7 @@
   "introFrames": 150,
   "introExitStart": 126,
   "nomineeFrames": 150,
-  "rosterFrames": 240
+  "rosterFrames": 240,
+  "winnerFrames": 180,
+  "presentationFrames": 180
 }

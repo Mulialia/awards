@@ -16,15 +16,23 @@ const initialsOf = (name: string) => {
  * aspect ratio (object-fit: cover + configurable focus) and for a missing portrait — the nominee's
  * initials over the panel (intentionally blank portraits are fine; never a fake photo).
  */
-export const PortraitReveal: React.FC<{nominee: Nominee; frame: number}> = ({nominee, frame}) => {
+export const PortraitReveal: React.FC<{
+  nominee: Nominee;
+  frame: number;
+  /** Closing exit window; null → no exit (the scene holds). Default = the nominee scene's exit. */
+  exitRange?: readonly [number, number] | null;
+  /** Frame at which the slow push-in has completed. Default = the nominee scene's end. */
+  driftEnd?: number;
+}> = ({nominee, frame, exitRange, driftEnd}) => {
   const {x, y, w, h, chamfer} = theme.layout.portrait;
   const c = theme.colors;
 
   const draw = prog(frame, NOM.outlineDraw[0], NOM.outlineDraw[1], easeInOut);
   const wipe = prog(frame, NOM.portraitWipe[0], NOM.portraitWipe[1], easeInOut);
-  const exit = prog(frame, NOM.exitStart + 6, NOM.exitStart + 34, easeIn);
+  const exitWin = exitRange === undefined ? ([NOM.exitStart + 6, NOM.exitStart + 34] as const) : exitRange;
+  const exit = exitWin ? prog(frame, exitWin[0], exitWin[1], easeIn) : 0;
   const sweep = prog(frame, NOM.lightSweep[0], NOM.lightSweep[1], easeInOut);
-  const drift = prog(frame, NOM.portraitWipe[1], NOMINEE_FRAMES - 30, (t) => t);
+  const drift = prog(frame, NOM.portraitWipe[1], driftEnd ?? NOMINEE_FRAMES - 30, (t) => t);
 
   const path = `M0 0 L${w - chamfer} 0 L${w} ${chamfer} L${w} ${h} L0 ${h} Z`;
   const poly = `polygon(0px 0px, ${w - chamfer}px 0px, ${w}px ${chamfer}px, ${w}px ${h}px, 0px ${h}px)`;

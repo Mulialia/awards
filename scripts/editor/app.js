@@ -5,7 +5,7 @@
 // ── state ────────────────────────────────────────────────
 const S = {
   awards: null, baseline: '', issues: [], timing: null,
-  media: {portraits: [], logos: [], companyLogos: []},
+  media: {portraits: [], recipients: [], logos: [], companyLogos: []},
   audio: {}, status: {}, jobs: [],
   catId: null, tab: 'nominees', mediaDir: 'portraits',
   cacheBust: {}, modalSubmit: null,
@@ -154,7 +154,8 @@ function renderSidebar() {
       </div>`)
     .join('');
   const nominees = S.awards.categories.reduce((n, c) => n + c.nominees.length, 0);
-  $('#sidebarFoot').innerHTML = `${S.awards.categories.length} categories · ${nominees} nominees<br>
+  const pres = (S.awards.presentations ?? []).length;
+  $('#sidebarFoot').innerHTML = `${S.awards.categories.length} categories · ${nominees} nominees · ${pres} award presentation(s)<br>
     green dot = final mixed video exists`;
 }
 
@@ -171,6 +172,8 @@ function renderTab() {
   if (!S.awards) return;
   if (S.tab === 'nominees') renderNominees();
   if (S.tab === 'category') renderCategoryTab();
+  if (S.tab === 'winner') renderWinnerTab();
+  if (S.tab === 'awards') renderAwardsTab();
   if (S.tab === 'media') renderMediaTab();
   if (S.tab === 'audio') renderAudioTab();
   if (S.tab === 'pipeline') renderPipelineTab();
@@ -267,8 +270,8 @@ function suggestNomineeId(c) {
 }
 
 function pickerStrip(kind, selected) {
-  const files = kind === 'portrait' ? S.media.portraits : S.media.companyLogos;
-  const noneLabel = kind === 'portrait' ? 'NO PHOTO' : 'NO LOGO';
+  const files = kind === 'portrait' ? S.media.portraits : kind === 'recipient' ? (S.media.recipients ?? []) : S.media.companyLogos;
+  const noneLabel = kind === 'portrait' ? 'NO PHOTO' : kind === 'recipient' ? 'NO IMAGE' : 'NO LOGO';
   const none = `<div class="thumb ${selected ? '' : 'selected'}" data-rel="" title="None">
     <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:10px;color:#555d73;text-align:center">${noneLabel}</div></div>`;
   return none + files.map((f) => `
@@ -436,7 +439,7 @@ async function uploadMedia(dirKey, name, file) {
     method: 'POST', body: file,
   });
   S.cacheBust[r.rel] = Date.now();
-  const key = dirKey === 'portraits' ? 'portraits' : dirKey === 'logos' ? 'logos' : 'companyLogos';
+  const key = dirKey === 'portraits' ? 'portraits' : dirKey === 'logos' ? 'logos' : dirKey === 'recipients' ? 'recipients' : 'companyLogos';
   const list = S.media[key].filter((f) => f.rel !== r.rel);
   list.push({name, rel: r.rel, url: r.url, size: file.size, mtime: Date.now()});
   list.sort((a, b) => a.name.localeCompare(b.name));
@@ -584,6 +587,189 @@ function addCategory() {
   toast('New category added — fill in the name, then Save');
 }
 
+// ── tab: winner (screen 1) ────────────────────────────────
+const winnerMode = (c) => (!c?.winner ? 'none' : c.winner.nomineeId ? 'nominee' : 'custom');
+
+/** What the winner's screen will actually show — mirrors resolveWinner in src/data/index.ts. */
+function winnerResolved(c) {
+  const w = c?.winner;
+  if (!w) return null;
+  const n = w.nomineeId ? (c.nominees.find((x) => x.id === w.nomineeId) ?? null) : null;
+  const name = String(w.name ?? n?.name ?? '').trim();
+  if (!name) return null;
+  return {
+    name,
+    business: String(w.business ?? n?.business ?? '').trim(),
+    portrait: w.portrait ?? n?.portrait ?? null,
+    companyLogo: w.companyLogo ?? n?.companyLogo ?? null,
+    achievement: w.achievement ?? n?.achievement ?? null,
+    year: w.year ?? S.awards.event?.year ?? null,
+  };
+}
+
+/** "Will show" summary card for the resolved winner. */
+function winnerSummaryCard(r) {
+  return `<div class="card"><h3>Will show</h3>
+    <div class="row">
+      ${r.portrait ? `<div class="thumb" style="cursor:default;width:110px;height:110px"><img src="${mediaUrl(r.portrait)}" alt=""></div>` : ''}
+      <div class="grow">
+        <div style="font-weight:600;font-size:15px">${esc(r.name)}</div>
+        <div class="sub" style="margin:2px 0 0">${esc(r.business || '(no brand line)')}${r.year != null ? ` · ${esc(r.year)}` : ''}</div>
+        <div class="row" style="margin-top:8px">
+          ${r.portrait ? '<span class="badge">photo</span>' : '<span class="badge">initials placeholder</span>'}
+          ${r.companyLogo ? '<span class="badge">logo</span>' : ''}
+          ${r.achievement ? '<span class="badge">citation</span>' : ''}
+        </div>
+      </div>
+    </div></div>`;
+}
+
+function renderWinnerTab() {
+  const c = cat();
+  const el = $('#tab-winner');
+  if (!c) { el.innerHTML = '<p class="sub">No category selected.</p>'; return; }
+  const ev = S.awards.event ?? {};
+  const w = c.winner ?? null;
+  const mode = winnerMode(c);
+  const r = winnerResolved(c);
+  const v = (x) => (x == null ? '' : x);
+  const nomineeOptions = c.nominees
+    .map((n) => `<option value="${esc(n.id)}" ${w?.nomineeId === n.id ? 'selected' : ''}>${esc(n.name)} — ${esc(n.business)}</option>`)
+    .join('');
+
+  el.innerHTML = `
+    <h2>Winner screen</h2>
+    <p class="sub">Screen 1 — the winner's moment for <strong>${esc(c.name || c.id)}</strong>: the category, the winner's image,
+      brand/logo, name and year on the live nominee background. Saved with the category; rendered to <code>out/${esc(c.id)}/winner.mp4</code>.</p>
+    <div class="card">
+      <h3>Who wins this category?</h3>
+      <div class="field">
+        <label>Winner source</label>
+        <select data-bind="win-mode">
+          <option value="none" ${mode === 'none' ? 'selected' : ''}>— no winner set (screen not renderable) —</option>
+          <option value="nominee" ${mode === 'nominee' ? 'selected' : ''} ${c.nominees.length ? '' : 'disabled'}>A nominee from this category…</option>
+          <option value="custom" ${mode === 'custom' ? 'selected' : ''}>Someone else — enter the details below</option>
+        </select>
+        <div class="hint">A linked nominee keeps their portrait, brand logo and citation automatically — nothing is ever invented.</div>
+      </div>
+      ${mode === 'nominee' ? `
+        <div class="field">
+          <label>Nominee</label>
+          <select data-bind="win-nominee">${nomineeOptions || '<option value="">(no nominees yet)</option>'}</select>
+        </div>` : ''}
+      ${mode === 'custom' ? `
+        <div class="grid-2">
+          <div class="field"><label>Name *</label><input type="text" data-bind="win-name" value="${esc(v(w?.name))}"></div>
+          <div class="field"><label>Brand / organisation</label><input type="text" data-bind="win-business" value="${esc(v(w?.business))}"></div>
+        </div>
+        <div class="grid-2">
+          <div class="field"><label>Citation <span class="counter" id="winAchCount">${(w?.achievement ?? '').length} / 140</span></label>
+            <textarea data-bind="win-achievement" rows="2" placeholder="One short VERIFIED statement — omit rather than invent">${esc(v(w?.achievement))}</textarea></div>
+          <div class="field"><label>Portrait focus</label><input type="text" data-bind="win-focus" value="${esc(v(w?.portraitFocus))}" placeholder="50% 15%">
+            <div class="hint">CSS object-position — fine-tunes the crop (x% y%).</div></div>
+        </div>
+        <div class="field">
+          <label>Portrait photo</label>
+          <input type="hidden" data-win="portrait" value="${esc(v(w?.portrait))}">
+          <div class="thumb-strip" data-kind="portrait" data-win-strip="portrait">${pickerStrip('portrait', w?.portrait)}</div>
+          <input type="file" accept=".jpg,.jpeg,.png,.webp" data-win-upload="portrait" hidden>
+          <button type="button" class="btn small" data-win-act="upload-portrait">Upload photo…</button>
+        </div>
+        <div class="field">
+          <label>Brand logo</label>
+          <input type="hidden" data-win="companyLogo" value="${esc(v(w?.companyLogo))}">
+          <div class="thumb-strip" data-kind="logo" data-win-strip="companyLogo">${pickerStrip('logo', w?.companyLogo)}</div>
+          <input type="file" accept=".jpg,.jpeg,.png,.webp" data-win-upload="companyLogo" hidden>
+          <button type="button" class="btn small" data-win-act="upload-logo">Upload logo…</button>
+        </div>` : ''}
+      <div class="field">
+        <label>Year</label>
+        <input type="text" inputmode="numeric" data-bind="win-year" value="${esc(v(w?.year))}" placeholder="${esc(ev.year ?? '')} — uses the event year">
+        <div class="hint">Leave empty to show the event year (${esc(ev.year ?? 'not set')}).</div>
+      </div>
+    </div>
+    ${r ? winnerSummaryCard(r) : ''}
+    <div class="card">
+      <h3>Generate</h3>
+      <div class="row">
+        <button class="btn" id="btnWinnerStill" ${r ? '' : 'disabled'}>Preview winner still</button>
+        <button class="btn primary" id="btnWinnerRender" ${r ? '' : 'disabled'}>Render winner.mp4</button>
+        <span class="grow"></span>
+        <span class="sub" style="margin:0">${S.status[c.id]?.winner ? `✓ out/${esc(c.id)}/winner.mp4 exists` : 'not rendered yet'}</span>
+      </div>
+    </div>
+    <div class="card"><h3>Jobs &amp; logs</h3><div id="winnerJobList"></div></div>`;
+
+  el.onchange = async (e) => {
+    const kind = e.target.dataset.winUpload;
+    if (kind) {
+      if (!c.winner) return;
+      const file = e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      const isPortrait = kind === 'portrait';
+      const base = isPortrait
+        ? `${idSafe(c.id)}-winner`
+        : (slug(winnerResolved(c)?.business ?? '') || slug(file.name.replace(/\.[^.]+$/, '')) || 'logo');
+      const ext = (file.name.match(/\.[^.]+$/) ?? ['.jpg'])[0].toLowerCase();
+      try {
+        const rel = await uploadMedia(isPortrait ? 'portraits' : 'logos/company', `${base}${ext}`, file);
+        c.winner[isPortrait ? 'portrait' : 'companyLogo'] = rel;
+        updateSaveUI(); renderWinnerTab();
+        toast(`Uploaded ${rel} — remember to Save`);
+      } catch (err) {
+        toast(`Upload failed: ${err.message}`, true);
+      }
+      return;
+    }
+    const bind = e.target.dataset.bind;
+    if (bind === 'win-mode') {
+      const m = e.target.value;
+      const year = c.winner?.year ?? null;
+      if (m === 'none') c.winner = null;
+      else if (m === 'nominee') c.winner = {nomineeId: c.nominees[0]?.id ?? null, name: null, business: null, portrait: null, portraitFocus: null, companyLogo: null, achievement: null, year};
+      else c.winner = {nomineeId: null, name: '', business: '', portrait: null, portraitFocus: null, companyLogo: null, achievement: null, year};
+    } else if (bind === 'win-nominee') {
+      c.winner = {...(c.winner ?? {}), nomineeId: e.target.value};
+    } else return;
+    renderWinnerTab(); updateSaveUI(); scheduleValidate();
+  };
+
+  el.oninput = (e) => {
+    const bind = e.target.dataset.bind;
+    if (!bind || !c.winner) return;
+    if (bind === 'win-year') {
+      c.winner.year = e.target.value.replace(/\D/g, '') || null;
+      e.target.value = c.winner.year ?? '';
+    } else if (bind === 'win-name') c.winner.name = e.target.value;
+    else if (bind === 'win-business') c.winner.business = e.target.value;
+    else if (bind === 'win-focus') c.winner.portraitFocus = e.target.value || null;
+    else if (bind === 'win-achievement') {
+      c.winner.achievement = e.target.value || null;
+      const cnt = $('#winAchCount');
+      if (cnt) { cnt.textContent = `${e.target.value.length} / 140`; cnt.classList.toggle('over', e.target.value.length > 140); }
+    } else return;
+    updateSaveUI(); scheduleValidate();
+  };
+
+  el.onclick = (e) => {
+    if (e.target.id === 'btnWinnerStill') return startJob('still', {screen: 'winner'});
+    if (e.target.id === 'btnWinnerRender') return startJob('winner');
+    const thumb = e.target.closest('.thumb[data-rel]');
+    if (thumb && c.winner) {
+      const strip = thumb.closest('.thumb-strip');
+      strip.querySelectorAll('.thumb').forEach((t) => t.classList.toggle('selected', t === thumb));
+      c.winner[strip.dataset.winStrip] = thumb.dataset.rel || null;
+      updateSaveUI(); scheduleValidate(); renderWinnerTab();
+      return;
+    }
+    const act = e.target.closest('[data-win-act]')?.dataset.winAct;
+    if (act) el.querySelector(`[data-win-upload="${act === 'upload-portrait' ? 'portrait' : 'companyLogo'}"]`).click();
+  };
+
+  renderJobs('#winnerJobList');
+}
+
 // ── tab: media ───────────────────────────────────────────
 const mediaKey = (dir) => (dir === 'portraits' ? 'portraits' : dir === 'logos' ? 'logos' : 'companyLogos');
 
@@ -594,6 +780,15 @@ function mediaUsageLocal(rel) {
       if (n.portrait === rel) hits.push(`${c.id} / ${n.id}`);
       if (n.companyLogo === rel) hits.push(`${c.id} / ${n.id}`);
     }
+    const w = c.winner;
+    if (w) {
+      if (w.portrait === rel) hits.push(`${c.id} / winner`);
+      if (w.companyLogo === rel) hits.push(`${c.id} / winner`);
+    }
+  }
+  for (const p of S.awards.presentations ?? []) {
+    if (p.image === rel) hits.push(`presentation ${p.id}`);
+    if (p.logo === rel) hits.push(`presentation ${p.id}`);
   }
   return hits;
 }
@@ -602,6 +797,7 @@ function renderMediaTab() {
   const el = $('#tab-media');
   const dirs = [
     ['portraits', 'Portraits'],
+    ['recipients', 'Presentation images'],
     ['logos/company', 'Company logos'],
     ['logos', 'Event logos (view only)'],
   ];
@@ -694,6 +890,272 @@ async function uploadMany(fileList) {
   }
   renderMediaTab();
   if (ok) toast(`Uploaded ${ok} file${ok > 1 ? 's' : ''}`);
+}
+
+// ── tab: awards (screen 2 — award presentations) ──────────
+const presentations = () => S.awards.presentations ?? (S.awards.presentations = []);
+
+function presentationCard(p, i, n) {
+  const img = p.image
+    ? `<img src="${mediaUrl(p.image)}" alt="" style="object-position:${esc(p.imageFocus || '50% 25%')}">`
+    : '<div class="no-photo">IMAGE<br>PLACEHOLDER</div>';
+  return `
+    <div class="nominee-card" data-i="${i}">
+      <div class="nominee-photo">${img}</div>
+      <div class="nominee-body">
+        <div class="n-name">${esc(p.name) || '<i>unnamed</i>'}</div>
+        <div class="n-business">${esc(p.award)}</div>
+        <div class="n-id">${esc(p.id)}</div>
+        <div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">
+          ${p.recipientType ? `<span class="badge">${esc(p.recipientType)}</span>` : ''}
+          ${p.logo ? '<span class="badge">logo</span>' : ''}
+          ${p.year != null ? `<span class="badge">${esc(p.year)}</span>` : ''}
+          ${p.note ? '<span class="badge">note</span>' : ''}
+        </div>
+      </div>
+      <div class="nominee-actions">
+        <button class="btn small" data-act="edit">Edit</button>
+        <button class="btn small ghost" data-act="up" ${i === 0 ? 'disabled' : ''} title="Move up">↑</button>
+        <button class="btn small ghost" data-act="down" ${i === n - 1 ? 'disabled' : ''} title="Move down">↓</button>
+        <button class="btn small ghost" data-act="preview" title="Render a preview frame">Preview</button>
+        <button class="btn small ghost" data-act="render" title="Render this presentation">Render</button>
+        <button class="btn small ghost danger" data-act="del" title="Remove">✕</button>
+      </div>
+    </div>`;
+}
+
+function renderAwardsTab() {
+  const el = $('#tab-awards');
+  const list = presentations();
+  el.innerHTML = `
+    <h2>Award presentations</h2>
+    <p class="sub">Screen 2 — present awards (including special awards) to organisations and individuals: their image, branding,
+      name and year. Each entry renders to <code>out/presentations/&lt;id&gt;.mp4</code>.</p>
+    <div class="row" style="margin-bottom:14px">
+      <button class="btn primary" id="btnAddPresentation">＋ Add presentation</button>
+      <button class="btn" id="btnRenderAllPresentations" ${list.length ? '' : 'disabled'}>▶ Render all</button>
+      <span class="grow"></span>
+      <span class="sub" style="margin:0">${list.length} presentation(s)</span>
+    </div>
+    <div class="nominee-grid">
+      ${list.map((p, i) => presentationCard(p, i, list.length)).join('') || '<p class="sub">No award presentations yet — add the first one.</p>'}
+    </div>
+    <div class="card"><h3>Jobs &amp; logs</h3><div id="awardsJobList"></div></div>
+    <div class="card"><h3>Rendered presentations — out/presentations/</h3><div id="presOutputs"><p class="sub" style="margin:0">Loading…</p></div></div>`;
+
+  $('#btnAddPresentation').onclick = () => openPresentationModal(-1);
+  $('#btnRenderAllPresentations').onclick = () => startJob('presentations');
+  $('#tab-awards .nominee-grid').onclick = (e) => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    const i = Number(btn.closest('.nominee-card').dataset.i);
+    const act = btn.dataset.act;
+    const p = list[i];
+    if (act === 'edit') openPresentationModal(i);
+    if (act === 'up' || act === 'down') {
+      const j = act === 'up' ? i - 1 : i + 1;
+      if (j < 0 || j >= list.length) return;
+      [list[i], list[j]] = [list[j], list[i]];
+      renderAwardsTab(); scheduleValidate(); updateSaveUI();
+      toast('Order changed — Save, then re-render to apply it');
+    }
+    if (act === 'preview') startJob('still', {screen: 'presentation', presentationId: p.id});
+    if (act === 'render') startJob('presentation', {presentationId: p.id});
+    if (act === 'del') {
+      if (!confirm(`Remove the presentation "${p.name}" (${p.award})?\n\n(Its rendered file stays in out/presentations/.)`)) return;
+      list.splice(i, 1);
+      renderAwardsTab(); scheduleValidate(); updateSaveUI();
+    }
+  };
+  renderJobs('#awardsJobList');
+  renderPresentationOutputs();
+}
+
+async function renderPresentationOutputs() {
+  const box = $('#presOutputs');
+  if (!box) return;
+  try {
+    const r = await api('/api/outputs?categoryId=presentations');
+    box.innerHTML = r.silent.length
+      ? `<table class="file-table">${r.silent.map((f) => {
+          const href = `/api/output?categoryId=presentations&file=${encodeURIComponent(f.name)}`;
+          return `<tr>
+            <td class="f-name">${esc(f.name)}</td>
+            <td class="f-size">${fmtSize(f.size)}</td>
+            <td style="text-align:right;white-space:nowrap">
+              <a class="btn small" target="_blank" rel="noopener" href="${href}">Open</a>
+              <a class="btn small" href="${href}&amp;dl=1">Download</a>
+            </td>
+          </tr>`;
+        }).join('')}</table>`
+      : '<p class="sub" style="margin:0">Nothing yet — use <strong>Render</strong> on a card above.</p>';
+  } catch (e) {
+    box.innerHTML = `<p class="sub" style="margin:0">Could not list outputs: ${esc(e.message)}</p>`;
+  }
+}
+
+function suggestPresentationId() {
+  const used = new Set(presentations().map((x) => x.id));
+  const base = 'presentation';
+  let id = base;
+  let i = 2;
+  while (used.has(id)) id = `${base}-${i++}`;
+  return id;
+}
+
+function openPresentationModal(index) {
+  const list = presentations();
+  const isNew = index < 0;
+  const p = isNew
+    ? {id: suggestPresentationId(), award: '', name: '', recipientType: null, business: null, image: null, imageFocus: null, logo: null, year: null, note: null}
+    : {...list[index]};
+  const v = (x) => (x == null ? '' : x);
+
+  openModal(`
+    <h3>${isNew ? 'Add award presentation' : `Edit · ${esc(p.name)}`}</h3>
+    <form id="presentationForm">
+      <div class="grid-2">
+        <div class="field"><label>Award title *</label><input type="text" name="award" value="${esc(v(p.award))}" placeholder="Lifetime Achievement Award" required></div>
+        <div class="field"><label>Recipient — name *</label><input type="text" name="name" value="${esc(v(p.name))}" placeholder="Individual or organisation" required></div>
+        <div class="field"><label>Recipient type</label>
+          <select name="recipientType">
+            <option value="" ${!p.recipientType ? 'selected' : ''}>— not set —</option>
+            <option value="individual" ${p.recipientType === 'individual' ? 'selected' : ''}>Individual</option>
+            <option value="organisation" ${p.recipientType === 'organisation' ? 'selected' : ''}>Organisation</option>
+          </select>
+        </div>
+        <div class="field"><label>Organisation / affiliation <span class="counter">optional</span></label><input type="text" name="business" value="${esc(v(p.business))}"></div>
+        <div class="field"><label>Year</label><input type="text" inputmode="numeric" name="year" value="${esc(v(p.year))}" placeholder="uses the event year"></div>
+        <div class="field"><label>ID <span class="counter">used in file names</span></label>
+          <input type="text" name="pid" value="${esc(p.id)}" data-idsafe>
+          <div class="hint">Output file: <code>out/presentations/&lt;id&gt;.mp4</code></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Image (photo of the recipient)</label>
+        <div class="row">
+          <div class="thumb" style="cursor:default"><img id="presImagePreview" src="${p.image ? mediaUrl(p.image) : ''}" alt="" style="object-position:${esc(v(p.imageFocus) || '50% 25%')};${p.image ? '' : 'display:none'}"></div>
+          <div class="grow">
+            <input type="hidden" name="image" value="${esc(v(p.image))}">
+            <div class="thumb-strip" data-kind="recipient" data-pres-strip="image">${pickerStrip('recipient', p.image)}</div>
+            <input type="file" accept=".jpg,.jpeg,.png,.webp" data-pres-upload="image" hidden>
+            <button type="button" class="btn small" data-pres-act="upload-image">Upload image…</button>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Image focus</label><input type="text" name="imageFocus" value="${esc(v(p.imageFocus))}" placeholder="50% 15%">
+          <div class="hint">CSS object-position — fine-tunes the crop (x% y%).</div></div>
+        <div class="field"><label>Note <span class="counter" id="presNoteCount">${(p.note ?? '').length} / 140</span></label>
+          <textarea name="note" rows="2" placeholder="One short VERIFIED statement — omit rather than invent">${esc(v(p.note))}</textarea></div>
+      </div>
+      <div class="field">
+        <label>Branding — logo</label>
+        <input type="hidden" name="logo" value="${esc(v(p.logo))}">
+        <div class="thumb-strip" data-kind="logo" data-pres-strip="logo">${pickerStrip('logo', p.logo)}</div>
+        <input type="file" accept=".jpg,.jpeg,.png,.webp" data-pres-upload="logo" hidden>
+        <button type="button" class="btn small" data-pres-act="upload-logo">Upload logo…</button>
+      </div>
+      <div class="modal-actions">
+        ${isNew ? '' : '<button type="button" class="btn danger" id="delPresentation">Delete</button>'}
+        <button type="button" class="btn" id="cancelModal">Cancel</button>
+        <button type="submit" class="btn primary">${isNew ? 'Add presentation' : 'Apply'}</button>
+      </div>
+    </form>`,
+    () => {
+      const form = $('#presentationForm');
+      const get = (name) => (form.querySelector(`[name="${name}"]`).value ?? '').toString();
+      const type = get('recipientType');
+      const data = {
+        id: idSafe(get('pid')),
+        award: get('award').trim(),
+        name: get('name').trim(),
+        recipientType: type === 'individual' || type === 'organisation' ? type : null,
+        business: get('business').trim() || null,
+        image: get('image') || null,
+        imageFocus: get('imageFocus').trim() || null,
+        logo: get('logo') || null,
+        year: get('year').replace(/\D/g, '') || null,
+        note: get('note').trim() || null,
+      };
+      if (data.year) data.year = Number(data.year);
+      if (!data.award || !data.name || !data.id) return toast('Award title, recipient name and ID are required', true);
+      const dup = presentations().some((x, xi) => x.id === data.id && xi !== index);
+      if (dup) return toast(`ID "${data.id}" is already used by another presentation`, true);
+      if (isNew) presentations().push(data);
+      else presentations()[index] = data;
+      closeModal();
+      renderAwardsTab(); scheduleValidate(); updateSaveUI();
+      toast(isNew ? 'Presentation added — remember to Save' : 'Presentation updated — remember to Save');
+    });
+
+  wirePresentationModal(index, isNew);
+}
+
+function wirePresentationModal(index, isNew) {
+  const form = $('#presentationForm');
+  const p = isNew ? null : presentations()[index];
+
+  form.addEventListener('input', (e) => {
+    if (e.target.name === 'note') {
+      const cnt = $('#presNoteCount');
+      cnt.textContent = `${e.target.value.length} / 140`;
+      cnt.classList.toggle('over', e.target.value.length > 140);
+    }
+    if (e.target.matches('[data-idsafe]')) e.target.value = idSafe(e.target.value);
+    if (e.target.name === 'imageFocus') $('#presImagePreview').style.objectPosition = e.target.value || '50% 25%';
+    updateSaveUI();
+  });
+  $('#cancelModal').onclick = closeModal;
+  $('#delPresentation')?.addEventListener('click', () => {
+    if (!confirm(`Remove the presentation "${p?.name ?? ''}"?\n\n(Its image file stays in public/recipients/.)`)) return;
+    presentations().splice(index, 1);
+    closeModal(); renderAwardsTab(); scheduleValidate(); updateSaveUI();
+  });
+
+  form.addEventListener('click', (e) => {
+    const thumb = e.target.closest('.thumb[data-rel]');
+    if (thumb) {
+      const strip = thumb.closest('.thumb-strip');
+      strip.querySelectorAll('.thumb').forEach((t) => t.classList.toggle('selected', t === thumb));
+      const field = strip.dataset.presStrip;
+      const rel = thumb.dataset.rel || '';
+      form.querySelector(`input[name="${field}"]`).value = rel;
+      if (field === 'image') {
+        const prev = $('#presImagePreview');
+        prev.src = rel ? mediaUrl(rel) : '';
+        prev.style.display = rel ? '' : 'none';
+      }
+      return;
+    }
+    const act = e.target.dataset.presAct;
+    if (act === 'upload-image' || act === 'upload-logo') {
+      form.querySelector(`[data-pres-upload="${act === 'upload-image' ? 'image' : 'logo'}"]`).click();
+    }
+  });
+
+  form.addEventListener('change', async (e) => {
+    const kind = e.target.dataset.presUpload;
+    if (!kind) return;
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    const isImage = kind === 'image';
+    const base = isImage
+      ? (idSafe(form.querySelector('[name=pid]').value) || slug(form.querySelector('[name=name]').value) || 'image')
+      : (slug(form.querySelector('[name=name]').value) || slug(file.name.replace(/\.[^.]+$/, '')) || 'logo');
+    const ext = (file.name.match(/\.[^.]+$/) ?? ['.jpg'])[0].toLowerCase();
+    try {
+      const rel = await uploadMedia(isImage ? 'recipients' : 'logos/company', `${base}${ext}`, file);
+      form.querySelector(`input[name="${isImage ? 'image' : 'logo'}"]`).value = rel;
+      const strip = form.querySelector(`.thumb-strip[data-kind="${isImage ? 'recipient' : 'logo'}"]`);
+      strip.innerHTML = pickerStrip(isImage ? 'recipient' : 'logo', rel);
+      if (isImage) { $('#presImagePreview').src = mediaUrl(rel); $('#presImagePreview').style.display = ''; }
+      toast(`Uploaded ${rel} — remember to Save`);
+    } catch (err) {
+      toast(`Upload failed: ${err.message}`, true);
+    }
+  });
 }
 
 // ── tab: audio ───────────────────────────────────────────
@@ -803,7 +1265,7 @@ function renderAudioTab() {
 }
 
 // ── tab: pipeline ────────────────────────────────────────
-const actionLabel = (a) => ({render: 'Render', audio: 'Soundtrack', mux: 'Mix', pipeline: 'Full pipeline', still: 'Preview still', stretch: 'Extend audio'})[a] ?? a;
+const actionLabel = (a) => ({render: 'Render', audio: 'Soundtrack', mux: 'Mix', pipeline: 'Full pipeline', still: 'Preview still', stretch: 'Extend audio', winner: 'Winner screen', presentation: 'Presentation', presentations: 'All presentations'})[a] ?? a;
 
 function stepCard(n, title, statusHtml, runAction, disabled) {
   return `
@@ -895,8 +1357,15 @@ async function renderOutputs() {
   }
 }
 
-function renderJobs() {
-  const box = $('#jobList');
+/** Render the job list into the current tab's container (each tab has its own). */
+function renderCurrentJobs() {
+  if (S.tab === 'pipeline') renderJobs('#jobList');
+  if (S.tab === 'winner') renderJobs('#winnerJobList');
+  if (S.tab === 'awards') renderJobs('#awardsJobList');
+}
+
+function renderJobs(target = '#jobList') {
+  const box = $(target);
   if (!box) return;
   if (!S.jobs.length) {
     box.innerHTML = '<p class="sub" style="margin:0">No runs yet — use the buttons above.</p>';
@@ -910,7 +1379,7 @@ function renderJobs() {
         <div class="job-head">
           <span class="job-state ${j.state}">${j.state}${j.state === 'running' && j.step ? ' · step' : ''}</span>
           <strong>${actionLabel(j.action)}</strong>
-          <span class="sub" style="margin:0">${esc(j.categoryId)}${j.nomineeId ? ` · ${esc(j.nomineeId)}` : ''}</span>
+          <span class="sub" style="margin:0">${j.presentationId ? esc(j.presentationId) : esc(j.categoryId)}${j.nomineeId ? ` · ${esc(j.nomineeId)}` : ''}</span>
           <span class="grow"></span>
           ${j.step ? `<span class="sub" style="margin:0">${esc(j.step)}</span>` : ''}
           ${active ? `<button class="btn small danger" data-kill="${j.id}">Stop</button>` : ''}
@@ -934,12 +1403,17 @@ async function startJob(action, extra = {}) {
   if (!S.awards) return;
   if (isDirty()) return toast('Save your changes first — runs use the saved data', true);
   if (errors().length) return toast('Fix the data errors first (red list at the top)', true);
-  if (!cat()) return toast('Select a category first', true);
+  // Presentation runs (screen 2) are global — every other action needs a selected category.
+  const presScoped = action === 'presentations' || action === 'presentation' || (action === 'still' && extra.screen === 'presentation');
+  if (!presScoped && !cat()) return toast('Select a category first', true);
+  if (action === 'presentation' && !extra.presentationId) return toast('No presentation selected', true);
+  if (action === 'presentations' && !(S.awards.presentations ?? []).length) return toast('No award presentations yet — add one in the Awards tab first', true);
+  if (action === 'still' && extra.screen === 'presentation' && !extra.presentationId) return toast('No presentation selected', true);
   try {
-    await postJson('/api/jobs', {action, categoryId: S.catId, ...extra});
+    await postJson('/api/jobs', {action, ...(presScoped ? {} : {categoryId: S.catId}), ...extra});
     toast(`${actionLabel(action)} queued — watch the log below`);
     await pollJobs(true);
-    if (S.tab === 'pipeline') renderJobs();
+    renderCurrentJobs();
   } catch (e) {
     toast(e.message, true);
   }
@@ -960,7 +1434,7 @@ async function pollJobs(force = false) {
     const sig = JSON.stringify(r.jobs.map((j) => [j.id, j.state, j.step, j.log.length]));
     if (sig !== jobsSig || force) {
       jobsSig = sig;
-      if (S.tab === 'pipeline') renderJobs();
+      renderCurrentJobs();
     }
     for (const j of newlyFinished) onJobFinished(j);
   } catch {}
@@ -974,7 +1448,7 @@ async function refreshCaches() {
     S.audio = s.audio;
     S.status = s.status;
     renderSidebar();
-    if (['pipeline', 'audio', 'media'].includes(S.tab)) renderTab();
+    if (['pipeline', 'audio', 'media', 'winner', 'awards'].includes(S.tab)) renderTab();
   } catch {}
 }
 
@@ -989,12 +1463,20 @@ async function onJobFinished(j) {
 }
 
 function showStill(j) {
-  const name = j.nomineeId ? `preview-${j.nomineeId}_f0110.png` : `preview-${j.categoryId}-intro_f0100.png`;
-  const caption = j.nomineeId
-    ? 'Frame 110 of the nominee scene (name + business fully visible).'
-    : 'Frame 100 of the category intro (title reveal).';
+  const name = j.screen === 'winner'
+    ? `preview-${j.categoryId}-winner_f0130.png`
+    : j.screen === 'presentation'
+      ? `preview-${j.presentationId}-presentation_f0130.png`
+      : j.nomineeId ? `preview-${j.nomineeId}_f0110.png` : `preview-${j.categoryId}-intro_f0100.png`;
+  const caption = j.screen === 'winner'
+    ? 'Frame 130 of the winner\'s screen (the card is fully revealed and holds).'
+    : j.screen === 'presentation'
+      ? 'Frame 130 of the award presentation screen (the card is fully revealed and holds).'
+      : j.nomineeId
+        ? 'Frame 110 of the nominee scene (name + business fully visible).'
+        : 'Frame 100 of the category intro (title reveal).';
   openModal(`
-    <h3>Preview · ${esc(j.nomineeId ?? j.categoryId)}</h3>
+    <h3>Preview · ${esc(j.screen === 'presentation' ? j.presentationId : (j.nomineeId ?? j.categoryId))}</h3>
     <img src="/api/still?name=${encodeURIComponent(name)}&v=${Date.now()}"
          style="width:100%;border-radius:8px;border:1px solid var(--line);display:block" alt="Preview frame">
     <p class="sub" style="margin-top:10px">${caption} Full-quality still rendered from the saved data.</p>
@@ -1037,7 +1519,8 @@ async function boot() {
   try {
     const s = await api('/api/state');
     S.awards = s.awards;
-    S.baseline = JSON.stringify(s.awards);
+    if (!Array.isArray(S.awards.presentations)) S.awards.presentations = [];
+    S.baseline = JSON.stringify(S.awards);
     S.issues = s.issues;
     S.timing = s.timing;
     S.media = s.media;

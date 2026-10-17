@@ -4,10 +4,19 @@ import {NOM} from '../utils/timing';
 import {easeIn, easeOut, prog} from '../utils/motion';
 
 /** Stage D — optional. Renders nothing at all (and takes no space) when no verified text is supplied. */
-export const AchievementPanel: React.FC<{text?: string | null; frame: number}> = ({text, frame}) => {
+export const AchievementPanel: React.FC<{
+  text?: string | null;
+  frame: number;
+  /** Reveal window; default = the nominee scene's cue. */
+  window?: readonly [number, number];
+  /** Closing exit window; null → no exit (the scene holds). Default = the nominee scene's exit. */
+  exitRange?: readonly [number, number] | null;
+}> = ({text, frame, window, exitRange}) => {
   if (!text?.trim()) return null;
-  const p = prog(frame, NOM.achievement[0], NOM.achievement[1], easeOut);
-  const e = prog(frame, NOM.exitStart + 20, NOM.exitStart + 42, easeIn);
+  const win = window ?? NOM.achievement;
+  const p = prog(frame, win[0], win[1], easeOut);
+  const exitWin = exitRange === undefined ? ([NOM.exitStart + 20, NOM.exitStart + 42] as const) : exitRange;
+  const e = exitWin ? prog(frame, exitWin[0], exitWin[1], easeIn) : 0;
   return (
     <div style={{marginTop: 46, opacity: p * (1 - e), transform: `translateY(${(1 - p) * 22}px) translateX(${-44 * e}px)`}}>
       <div

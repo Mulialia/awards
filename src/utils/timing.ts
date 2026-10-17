@@ -13,6 +13,10 @@ export const NOMINEE_FRAMES = timing.nomineeFrames; // 5.0 s (incl. open + close
 
 export const ROSTER_FRAMES = timing.rosterFrames; // 8.0 s — closing list of all nominees
 
+export const WINNER_FRAMES = timing.winnerFrames; // 6.0 s — screen 1, the winner's moment (holds to the last frame)
+
+export const PRESENTATION_FRAMES = timing.presentationFrames; // 6.0 s — screen 2, award presentations (holds to the last frame)
+
 export const categoryFrames = (category: Category) =>
   introFrames(category) + category.nominees.length * NOMINEE_FRAMES + ROSTER_FRAMES;
 
@@ -95,4 +99,41 @@ export const ROSTER = {
   rowsStart: 34,
   rowStagger: 8,
   rowDur: 28,
+} as const;
+
+/**
+ * Winner's screen (screen 1) — local frames (0 … WINNER_FRAMES).
+ * Same motion language as a nominee scene, but without the closing exit: the scene holds so the
+ * LAST FRAME still shows the full winner's card. The portrait keeps the standard NOM cues.
+ */
+export const WIN = {
+  gateCollapse: [0, 12], // inherited hairline collapses to the centre and disappears
+  eyebrow: [24, 40], // "WINNER"
+  categoryStart: 32, // the category name under the eyebrow
+  categoryDur: 22,
+  nameStart: 44, // the winner's name
+  nameStagger: 5,
+  nameDur: 24,
+  rule: [74, 92],
+  identityStart: 80, // brand row, then year
+  identityStagger: 6,
+  identityDur: 16,
+  achievement: [110, 128], // optional citation
+} as const;
+
+/**
+ * Award presentation screen (screen 2) — local frames (0 … PRESENTATION_FRAMES).
+ * Holds on the complete card, like the winner's screen. The image keeps the standard NOM cues.
+ */
+export const PRES = {
+  gateCollapse: [0, 12],
+  eyebrow: [22, 42], // award title
+  nameStart: 38, // recipient name
+  nameStagger: 5,
+  nameDur: 24,
+  rule: [68, 86],
+  identityStart: 74, // brand row, then type · year
+  identityStagger: 6,
+  identityDur: 16,
+  note: [104, 122], // optional note
 } as const;

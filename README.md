@@ -52,6 +52,53 @@ Everything on screen comes from **`src/data/awards.json`**.
 - Names wrap onto 2 lines (3 only for very long names) by measuring real glyph widths — type is never shrunk below ~92 px unless it must go to 3 lines (≥ 70 px).
 - Adding a 6th (or 14th) nominee = adding one object to the `nominees` array. Durations are computed from the array length.
 
+### The winner's screen (screen 1)
+
+Set `winner` on a category and it renders a **winner's moment** — the category, the winner's
+portrait (same reveal as the nominee scenes), brand/logo, name and year on the live background:
+
+```jsonc
+{
+  "id": "youth-creative-business-concept",
+  // ...
+  "winner": {
+    "nomineeId": "youth-001", // link to a nominee → their name/photo/logo/citation are reused
+    "year": null,             // optional — falls back to the event year
+    // For a winner OUTSIDE the nominee list, leave nomineeId null and fill in instead:
+    "name": null, "business": null, "portrait": null, "portraitFocus": null,
+    "companyLogo": null, "achievement": null
+  }
+}
+```
+
+No winner set → the screen is simply not renderable (it shows an on-brand notice in Studio; the
+editor disables the render button). Nothing is ever invented.
+
+### Award presentations (screen 2 — organisations & individuals, incl. special awards)
+
+Each entry of the top-level `presentations` array renders its own **award presentation screen**
+with the award title, the recipient's image, branding/logo, name, individual/organisation label
+and year. Files land in `out/presentations/<id>.mp4`.
+
+```jsonc
+{
+  "presentations": [
+    {
+      "id": "lifetime-achievement",              // required, unique, used in file names
+      "award": "Lifetime Achievement Award",     // required — the award title
+      "name": "…",                               // required — the individual or organisation
+      "recipientType": "organisation",           // optional: "individual" | "organisation" | null
+      "business": null,                          // optional — organisation / affiliation line
+      "image": "recipients/lifetime-001.jpg",    // optional — file in /public/recipients
+      "imageFocus": null,                        // optional — CSS object-position
+      "logo": null,                              // optional — branding, "logos/company/…"
+      "year": null,                              // optional — falls back to the event year
+      "note": null                               // optional — ONE short VERIFIED statement
+    }
+  ]
+}
+```
+
 ### Replacing placeholder portraits
 
 1. Put the approved photo in `public/portraits/` (JPG/PNG, any aspect ratio; ≥ 1100 px tall recommended).
@@ -118,9 +165,16 @@ A local, zero-dependency web UI that covers the whole process end to end:
   **Voice Over** length (seconds): the intro holds on the title so a spoken introduction fits, then
   plays its standard exit — see "Category intro voice-over" above. A *Measure from audio file…*
   button fills the value from your VO recording's duration.
-- **Media tab** — drag-and-drop upload of portraits and company logos into `public/`, with usage
-  info and safe deletion (files still referenced by a nominee are protected; template artwork in
-  `public/logos/` is view-only).
+- **Winner tab** — the screen-1 setup for the selected category: pick the winner from the nominee
+  list (portrait, brand logo and citation are reused automatically) or enter a custom recipient
+  with photo/logo uploads, set the year, preview a still and render `out/<id>/winner.mp4`.
+- **Awards tab** — manage the screen-2 **award presentations** (organisations and individuals,
+  including special awards): add/edit/reorder/delete entries with image + logo pickers and
+  uploads, preview a still, render one presentation or all of them to `out/presentations/`, and
+  browse the finished MP4s.
+- **Media tab** — drag-and-drop upload of portraits, presentation images and company logos into
+  `public/`, with usage info and safe deletion (files still referenced by a nominee, winner or
+  presentation are protected; template artwork in `public/logos/` is view-only).
 - **Audio tab** — upload the polished per-category soundtrack (music **+ voice-over**, stereo
   48 kHz, whole sequence — WAV/MP3/M4A/AAC/FLAC/OGG), preview it, remove it, or generate the
   placeholder. The track's length is checked against the video (including any voice-over stretch),
@@ -150,6 +204,14 @@ node scripts/render-category.mjs youth-creative-business-concept
 # Only some pieces
 node scripts/render-category.mjs youth-creative-business-concept --only=sequence
 node scripts/render-category.mjs youth-creative-business-concept --only=nominees --nominee=youth-003
+
+# Screen 1 — the winner's screen (needs a winner set in the editor's Winner tab)
+node scripts/render-category.mjs youth-creative-business-concept --only=winner
+#   → out/youth-creative-business-concept/winner.mp4
+
+# Screen 2 — award presentations (organisations & individuals, incl. special awards)
+node scripts/render-presentation.mjs lifetime-achievement   # one → out/presentations/<id>.mp4
+node scripts/render-presentation.mjs --all                 # every presentation
 
 # Equivalent raw Remotion CLI
 npx remotion render src/index.ts NomineeReveal out/zinzia.mp4 \
@@ -201,13 +263,19 @@ src/
     NomineeReveal.tsx            NomineeScene (A→E, transparent) + standalone composition
     CategoryRoster.tsx           closing screen listing all nominees (1 or 2 columns, up to 14)
     CategorySequence.tsx         intro + N scenes + roster on one continuous background
+    WinnerReveal.tsx             screen 1 — the winner's moment (holds on the full card)
+    PresentationScreen.tsx       screen 2 — award presentations for organisations & individuals
   components/
     BackgroundAtmosphere.tsx     dot-matrix continent, network, inbound arcs, light, vignette
     PortraitReveal.tsx           chamfered frame, bottom-up wipe, light sweep, placeholder
     NomineeIdentity.tsx          name · rule · title · business · country
+    WinnerIdentity.tsx           WINNER · category · name · brand/logo · year · citation
+    PresentationIdentity.tsx     award title · recipient · branding · type · year · note
     AchievementPanel.tsx         optional Stage D
     CategoryTitle.tsx            intro typography
-    Chrome.tsx                   category label + emblem (persistent furniture)
+    Chrome.tsx                   category/award label + emblem (persistent furniture)
+    EventFooter.tsx              discreet event name + year, bottom-left (presentation screens)
+    ScreenNotice.tsx             on-brand "nothing set yet" notice (never invents content)
     AwardsTransition.tsx         the gold "gate line" (shared entry/exit device)
     YoraLogo.tsx / AfricanSignature.tsx
   data/   awards.json · types.ts · index.ts · timing.json · qa-fixtures.ts
@@ -217,7 +285,7 @@ src/
 
 - **Deterministic**: every value is a pure function of the frame number; the only randomness is a seeded PRNG. No CSS animations, no timers.
 - **Continuity**: the background lives _outside_ the per-nominee `<Sequence>`s and is driven by the absolute frame; every scene ends and starts on the same state (full-width gold hairline on the calm backdrop).
-- **Future winner reveal**: add `compositions/WinnerReveal.tsx` composed from the same components (BackgroundAtmosphere, Chrome, PortraitReveal, GateLine, theme) and register it in `Root.tsx`; nothing in the nominee system needs to change.
+- **Winner reveal & award presentations**: `WinnerReveal` (screen 1) and `AwardPresentation` (screen 2) are built from the same components (BackgroundAtmosphere, Chrome, PortraitReveal, GateLine, theme) and hold on their final state so the last frame still shows the full card. Register more via the editor's Winner/Awards tabs — nothing in the nominee system needs to change.
 
 ## 5. Troubleshooting
 

@@ -35,6 +35,7 @@ const MIME = {
 // artwork referenced by the React components, so it is view-only).
 const MEDIA_DIRS = {
   portraits: path.join(ROOT, 'public', 'portraits'),
+  recipients: path.join(ROOT, 'public', 'recipients'),
   'logos/company': path.join(ROOT, 'public', 'logos', 'company'),
   logos: path.join(ROOT, 'public', 'logos'),
 };
@@ -62,6 +63,18 @@ function normalize(data) {
     if (typeof c.number !== 'number') c.number = 0;
     if (c.introVoiceOverSeconds != null && typeof c.introVoiceOverSeconds !== 'number') {
       c.introVoiceOverSeconds = Number(c.introVoiceOverSeconds) || null;
+    }
+    // Winner's screen (screen 1)
+    if (c.winner != null && (typeof c.winner !== 'object' || Array.isArray(c.winner))) c.winner = null;
+    if (c.winner && c.winner.year != null && typeof c.winner.year !== 'number') {
+      c.winner.year = Number(String(c.winner.year).replace(/\D/g, '')) || null;
+    }
+  }
+  // Award presentations (screen 2)
+  data.presentations = Array.isArray(data.presentations) ? data.presentations : [];
+  for (const p of data.presentations) {
+    if (p && p.year != null && typeof p.year !== 'number') {
+      p.year = Number(String(p.year).replace(/\D/g, '')) || null;
     }
   }
   return data;
@@ -219,6 +232,7 @@ function clearSoundtrack(id) {
 const categoryStatus = (id) => ({
   silent: fs.existsSync(path.join(ROOT, 'out', id, 'category-sequence-silent.mp4')),
   mixed: fs.existsSync(path.join(ROOT, 'out', id, 'with-audio', 'category-sequence.mp4')),
+  winner: fs.existsSync(path.join(ROOT, 'out', id, 'winner.mp4')),
 });
 
 /** Where is this media file referenced in the awards data? (blocks deletion) */
@@ -229,6 +243,15 @@ function mediaUsage(relPath, data) {
       if (n.portrait === relPath) hits.push(`${c.id} / ${n.id} (portrait)`);
       if (n.companyLogo === relPath) hits.push(`${c.id} / ${n.id} (logo)`);
     }
+    const w = c.winner;
+    if (w) {
+      if (w.portrait === relPath) hits.push(`${c.id} / winner (portrait)`);
+      if (w.companyLogo === relPath) hits.push(`${c.id} / winner (logo)`);
+    }
+  }
+  for (const p of data.presentations ?? []) {
+    if (p.image === relPath) hits.push(`presentation ${p.id} (image)`);
+    if (p.logo === relPath) hits.push(`presentation ${p.id} (logo)`);
   }
   return hits;
 }
@@ -241,7 +264,8 @@ const queue = [];
 let running = null;
 
 const jobView = (j) => ({
-  id: j.id, action: j.action, categoryId: j.categoryId, nomineeId: j.nomineeId ?? null, state: j.state, step: j.step,
+  id: j.id, action: j.action, categoryId: j.categoryId, nomineeId: j.nomineeId ?? null,
+  presentationId: j.presentationId ?? null, screen: j.screen ?? null, state: j.state, step: j.step,
   labels: j.labels, log: j.log, created: j.created, started: j.started, ended: j.ended,
 });
 
@@ -259,6 +283,15 @@ function stepsFor(action, p) {
   if (action === 'audio') return [audio];
   if (action === 'mux') return [mux];
   if (action === 'stretch') return [stretch];
+  if (action === 'winner') {
+    return [{label: 'Render winner screen · WinnerReveal', cmd: 'node', args: ['scripts/render-category.mjs', p.categoryId, '--only=winner']}];
+  }
+  if (action === 'presentation') {
+    return [{label: 'Render award presentation · AwardPresentation', cmd: 'node', args: ['scripts/render-presentation.mjs', p.presentationId]}];
+  }
+  if (action === 'presentations') {
+    return [{label: 'Render all award presentations · AwardPresentation', cmd: 'node', args: ['scripts/render-presentation.mjs', '--all']}];
+  }
   if (action === 'pipeline') {
     // With an existing soundtrack: render → keep it → extend it for the voice-over hold if the
     // video grew (stretch no-ops when in sync / no VO; --if-short tolerates a baked full-length
@@ -271,11 +304,20 @@ function stepsFor(action, p) {
       : [render, audio, mux];
   }
   if (action === 'still') {
+    const frame = String(p.frame ?? 130);
+    if (p.screen === 'winner') {
+      const props = JSON.stringify({categoryId: p.categoryId});
+      return [{label: 'Render preview still · WinnerReveal', cmd: 'node', args: ['scripts/stills.mjs', 'WinnerReveal', props, frame, 'out/stills', `preview-${p.categoryId}-winner`]}];
+    }
+    if (p.screen === 'presentation') {
+      const props = JSON.stringify({presentationId: p.presentationId});
+      return [{label: 'Render preview still · AwardPresentation', cmd: 'node', args: ['scripts/stills.mjs', 'AwardPresentation', props, frame, 'out/stills', `preview-${p.presentationId}-presentation`]}];
+    }
     const comp = p.nomineeId ? 'NomineeReveal' : 'CategoryIntro';
     const props = JSON.stringify(p.nomineeId ? {categoryId: p.categoryId, nomineeId: p.nomineeId} : {categoryId: p.categoryId});
-    const frame = String(p.nomineeId ? (p.frame ?? 110) : (p.frame ?? 100));
+    const stillFrame = String(p.nomineeId ? (p.frame ?? 110) : (p.frame ?? 100));
     const prefix = p.nomineeId ? `preview-${p.nomineeId}` : `preview-${p.categoryId}-intro`;
-    return [{label: `Render preview still · ${comp}`, cmd: 'node', args: ['scripts/stills.mjs', comp, props, frame, 'out/stills', prefix]}];
+    return [{label: `Render preview still · ${comp}`, cmd: 'node', args: ['scripts/stills.mjs', comp, props, stillFrame, 'out/stills', prefix]}];
   }
   return null;
 }
@@ -351,7 +393,7 @@ const server = http.createServer(async (req, res) => {
     // ── media under public/ ─────────────────────────────────────────────────────────────────────
     if (p.startsWith('/media/')) {
       const rel = p.slice('/media/'.length);
-      const dirKey = ['logos/company', 'portraits', 'logos'].find((k) => rel.startsWith(`${k}/`));
+      const dirKey = ['logos/company', 'portraits', 'recipients', 'logos'].find((k) => rel.startsWith(`${k}/`));
       const abs = dirKey && safeJoin(MEDIA_DIRS[dirKey], rel.slice(dirKey.length + 1));
       if (req.method !== 'GET' || !abs) return sendJson(res, 404, {error: 'not found'});
       return serveFile(req, res, abs);
@@ -378,7 +420,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (p === '/api/media' && req.method === 'DELETE') {
       const rel = q.get('path') ?? '';
-      const dirKey = ['logos/company', 'portraits', 'logos'].find((k) => rel.startsWith(`${k}/`));
+      const dirKey = ['logos/company', 'portraits', 'recipients', 'logos'].find((k) => rel.startsWith(`${k}/`));
       if (!dirKey) return sendJson(res, 400, {error: 'unknown media path'});
       if (READONLY_MEDIA.has(dirKey)) return sendJson(res, 403, {error: 'event logos are template artwork referenced by the components — view only'});
       const abs = safeJoin(MEDIA_DIRS[dirKey], rel.slice(dirKey.length + 1));
@@ -398,6 +440,7 @@ const server = http.createServer(async (req, res) => {
         timing: readTiming(),
         media: {
           portraits: listFiles(MEDIA_DIRS.portraits, IMAGE_EXT).map((f) => mediaInfo('portraits', f)),
+          recipients: listFiles(MEDIA_DIRS.recipients, IMAGE_EXT).map((f) => mediaInfo('recipients', f)),
           logos: listFiles(MEDIA_DIRS.logos, IMAGE_EXT).map((f) => mediaInfo('logos', f)),
           companyLogos: listFiles(MEDIA_DIRS['logos/company'], IMAGE_EXT).map((f) => mediaInfo('logos/company', f)),
         },
@@ -483,12 +526,23 @@ const server = http.createServer(async (req, res) => {
       const body = await jsonBody();
       const action = body.action;
       const categoryId = String(body.categoryId ?? '');
-      if (!['render', 'audio', 'mux', 'pipeline', 'still', 'stretch'].includes(action)) return sendJson(res, 400, {error: 'unknown action'});
-      if (!/^[\w.-]+$/.test(categoryId)) return sendJson(res, 400, {error: 'invalid category id'});
+      const presentationId = String(body.presentationId ?? '');
+      const screen = body.screen ? String(body.screen) : null;
+      const KNOWN = ['render', 'audio', 'mux', 'pipeline', 'still', 'stretch', 'winner', 'presentation', 'presentations'];
+      if (!KNOWN.includes(action)) return sendJson(res, 400, {error: 'unknown action'});
+      if (categoryId && !/^[\w.-]+$/.test(categoryId)) return sendJson(res, 400, {error: 'invalid category id'});
+      if (presentationId && !/^[\w.-]+$/.test(presentationId)) return sendJson(res, 400, {error: 'invalid presentation id'});
       if (body.nomineeId !== undefined && !/^[\w.-]*$/.test(String(body.nomineeId))) return sendJson(res, 400, {error: 'invalid nominee id'});
-      const steps = stepsFor(action, {categoryId, nomineeId: body.nomineeId, frame: body.frame});
+      const needsCategory = ['render', 'audio', 'mux', 'pipeline', 'stretch', 'winner'].includes(action)
+        || (action === 'still' && screen !== 'presentation');
+      const needsPresentation = action === 'presentation' || action === 'presentations' || (action === 'still' && screen === 'presentation');
+      if (needsCategory && !categoryId) return sendJson(res, 400, {error: 'categoryId is required'});
+      if (needsPresentation && action !== 'presentations' && !presentationId) return sendJson(res, 400, {error: 'presentationId is required'});
+      const steps = stepsFor(action, {categoryId, nomineeId: body.nomineeId, presentationId, screen, frame: body.frame});
+      if (!steps) return sendJson(res, 400, {error: 'unknown action'});
       const job = {
-        id: randomUUID(), action, categoryId, nomineeId: body.nomineeId ?? null, state: 'queued', step: null,
+        id: randomUUID(), action, categoryId: categoryId || null, nomineeId: body.nomineeId ?? null,
+        presentationId: presentationId || null, screen, state: 'queued', step: null,
         labels: steps.map((s) => s.label), log: '', created: Date.now(), started: null, ended: null,
         steps, child: null,
       };

@@ -1,7 +1,7 @@
 // Programmatic production renderer.
-//   node scripts/render-category.mjs <categoryId> [--only=intro,nominees,roster,sequence] [--nominee=youth-003]
+//   node scripts/render-category.mjs <categoryId> [--only=intro,nominees,roster,winner,sequence] [--nominee=youth-003]
 // Outputs (silent masters) to out/<categoryId>/ :
-//   00-category-intro.mp4, 01-<nomineeId>.mp4 …, 99-category-roster.mp4, category-sequence-silent.mp4
+//   00-category-intro.mp4, 01-<nomineeId>.mp4 …, 99-category-roster.mp4, winner.mp4, category-sequence-silent.mp4
 import {bundle} from '@remotion/bundler';
 import {renderMedia, selectComposition} from '@remotion/renderer';
 import path from 'node:path';
@@ -10,7 +10,7 @@ import fs from 'node:fs';
 const args = process.argv.slice(2);
 const categoryId = args.find((a) => !a.startsWith('--'));
 if (!categoryId) {
-  console.error('Usage: node scripts/render-category.mjs <categoryId> [--only=intro,nominees,roster,sequence] [--nominee=<id>]');
+  console.error('Usage: node scripts/render-category.mjs <categoryId> [--only=intro,nominees,roster,winner,sequence] [--nominee=<id>]');
   process.exit(1);
 }
 const flag = (name) => args.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
@@ -26,6 +26,14 @@ if (!category) {
 
 const outDir = path.join('out', categoryId);
 fs.mkdirSync(outDir, {recursive: true});
+// Fail fast (before the slow bundle) when a winner render is requested but no winner is set.
+if (only.length === 1 && only[0] === 'winner') {
+  const w = category.winner;
+  if (!w || (!(w.nomineeId ?? '') && !String(w.name ?? '').trim())) {
+    console.error(`No winner set for "${categoryId}" — open the editor, Winner tab, choose the winner, Save, then render again.`);
+    process.exit(1);
+  }
+}
 const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
 const browserExecutable = process.env.REMOTION_BROWSER_EXECUTABLE || null;
 
@@ -53,5 +61,19 @@ if (only.includes('nominees')) {
   }
 }
 if (only.includes('roster')) await job('CategoryRoster', {categoryId}, '99-category-roster.mp4');
+if (only.includes('winner')) {
+  // Screen 1 — only rendered when the organiser has actually set a winner (nothing is invented).
+  const w = category.winner;
+  const winnerSet = !!w && ((w.nomineeId ?? '') !== '' || String(w.name ?? '').trim() !== '');
+  if (!winnerSet) {
+    if (only.length === 1) {
+      console.error(`No winner set for "${categoryId}" — open the editor, Winner tab, choose the winner, Save, then render again.`);
+      process.exit(1);
+    }
+    console.log('  winner.mp4  skipped (no winner set for this category)');
+  } else {
+    await job('WinnerReveal', {categoryId}, 'winner.mp4');
+  }
+}
 if (only.includes('sequence')) await job('CategorySequence', {categoryId}, 'category-sequence-silent.mp4');
 console.log('All requested renders complete →', outDir);
